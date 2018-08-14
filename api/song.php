@@ -24,7 +24,7 @@ else if ($method === "POST") {
 
         $db->query("INSERT INTO song (user, party, url) VALUE ($user, $party, $url)");
 
-        response(get_youtube_id($_POST["url"]), 201);
+        response($db->select("SELECT id, url FROM song WHERE id={$db->insert_id()}")[0], 201);
     }
 }
 
