@@ -4,13 +4,14 @@ require "include/requirements.php";
 
 if ($method === "GET") {
 
-    if (require_params(["key", "value", "last"], $_GET)) {
+    if (require_params(["key", "value", "last", "limit"], $_GET)) {
 
         $key = $db->escape($_GET["key"]);
         $value = $db->quote($_GET["value"]);
         $last = $db->escape($_GET["last"]);
+        $limit = $db->escape($_GET["limit"]);
 
-        response($db->select("SELECT id, url FROM song WHERE $key=$value AND id > $last"), 200);
+        response($db->select("SELECT id, url FROM song WHERE $key=$value AND id > $last LIMIT $limit"), 200);
     }
 }
 
