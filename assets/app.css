@@ -17,7 +17,7 @@ body {
 }
 
 .player {
-    background: url(../img/overlay.png), linear-gradient(45deg, rgb(23, 46, 70) 0%, rgb(0, 131, 55) 100%);
+    background: linear-gradient(45deg, rgb(23, 46, 70) 0%, rgb(0, 131, 55) 100%);
 }
 
 .border {
