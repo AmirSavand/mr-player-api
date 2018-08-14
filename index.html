@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Meta data -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Title and favicon -->
+  <title>MR Player</title>
+  <link rel="shortcut icon" type="image/png" href="assets/favicon.png" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="assets/app.css">
+
+  <!-- Scripts -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script src="node_modules/jquery/dist/jquery.js"></script>
+  <script src="node_modules/popper.js/dist/umd/popper.js"></script>
+  <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="node_modules/angular/angular.js"></script>
+  <script src="node_modules/angular-youtube-embed/dist/angular-youtube-embed.min.js"></script>
+  <script src="assets/app.js"></script>
+</head>
+
+<body class="bg-light" ng-app="mrPlayer" ng-controller="MainController" ng-class="{loaded: loaded}">
+
+  <!-- Cover container -->
+  <div class="container-fluid py-5 bg-dark text-light">
+
+    <!-- Content -->
+    <div class="container py-5 text-center">
+      <div class="row justify-content-center">
+        <div class="col-lg-3">
+          <h1>
+            <small class="text-secondary font-weight-bold">PARTY</small><br><br>
+            <span class="border rounded px-4 py-2 text-warning border-warning">{{ party }}</span>
+          </h1>
+        </div>
+        <div class="col-lg-3">
+          <h1>
+            <small class="text-secondary font-weight-bold">SONGS</small><br><br>
+            <span class="border rounded px-4 py-2 text-info border-info">{{ songs.length }}</span>
+          </h1>
+        </div>
+        <div class="col-lg-3">
+          <h1>
+            <small class="text-secondary font-weight-bold">MEMBERS</small><br><br>
+            <span class="border rounded px-4 py-2 text-success border-success">{{ getUsers().length }}</span>
+          </h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main container -->
+  <div class="container py-5">
+
+    <!-- Sides -->
+    <div class="row">
+
+      <!-- Left side -->
+      <div class="col-lg-7">
+
+        <!-- Player -->
+        <div class="card mb-2">
+          <div class="card-body">
+            <div class="player embed-responsive embed-responsive-16by9">
+              <youtube-video player="player"
+                video-id="currentSong.url"
+                player-vars="playerConfig">
+              </youtube-video>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right side -->
+      <div class="col-lg-5">
+
+        <!-- Input -->
+        <form ng-submit="addSong(form)" class="mb-2">
+          <input type="text"
+            class="form-control form-control-lg"
+            ng-model="form.data.url"
+            placeholder="https://www.youtube.com..." />
+        </form>
+
+        <!-- Songs -->
+        <div class="card mb-2"
+          ng-repeat="song in songs"
+          ng-class="{'bg-dark text-light': song.id == currentSong.id}"
+          ng-click="playSong(song)"
+          ng-if="song.isValid">
+          <div class="media card-body">
+            <img class="mr-2 rounded" ng-src="{{ song.thumbnail }}" width="128">
+            <div class="media-body">
+              <p class="m-0">{{ song.title }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
