@@ -7,6 +7,13 @@ body {
     cursor: pointer;
 }
 
+[nosel] {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 .loaded {
     opacity: 1;
     transition: all 0. 3s;
