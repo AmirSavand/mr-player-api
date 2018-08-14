@@ -30,24 +30,24 @@
   <div class="container-fluid py-5 bg-dark text-light">
 
     <!-- Content -->
-    <div class="container py-5 text-center">
+    <div class="container text-center">
       <div class="row justify-content-center">
-        <div class="col-lg-3">
+        <div class="col-lg-3 py-5">
           <h1>
-            <small class="text-secondary font-weight-bold">PARTY</small><br><br>
+            <small class="text-secondary font-weight-bold" nosel>PARTY</small><br><br>
             <span class="border rounded px-4 py-2 text-warning border-warning">{{ party }}</span>
           </h1>
         </div>
-        <div class="col-lg-3">
+        <div class="col-lg-3 py-5" nosel>
           <h1>
             <small class="text-secondary font-weight-bold">SONGS</small><br><br>
             <span class="border rounded px-4 py-2 text-info border-info">{{ songs.length }}</span>
           </h1>
         </div>
-        <div class="col-lg-3">
-          <h1>
+        <div class="col-lg-3 py-5" nosel>
+          <h1 title="Interaction with other party members feature is coming soon">
             <small class="text-secondary font-weight-bold">MEMBERS</small><br><br>
-            <span class="border rounded px-4 py-2 text-success border-success">{{ getUsers().length }}</span>
+            <span class="border rounded px-4 py-2 text-success border-success">?</span>
           </h1>
         </div>
       </div>
@@ -84,19 +84,24 @@
           <input type="text"
             class="form-control form-control-lg"
             ng-model="form.data.url"
+            ng-disabled="form.loading"
             placeholder="https://www.youtube.com..." />
         </form>
 
         <!-- Songs -->
         <div class="card mb-2"
-          ng-repeat="song in songs"
-          ng-class="{'bg-dark text-light': song.id == currentSong.id}"
-          ng-click="playSong(song)"
-          ng-if="song.isValid">
+          ng-repeat="song in songs | orderBy:'id' track by $index"
+          ng-class="{'bg-dark text-light': song.id == currentSong.id}">
           <div class="media card-body">
-            <img class="mr-2 rounded" ng-src="{{ song.thumbnail }}" width="128">
+            <img width="128"
+              class="mr-2 rounded"
+              ng-src="{{ song.thumbnail }}"
+              ng-click="playSong(song)">
             <div class="media-body">
-              <p class="m-0">{{ song.title }}</p>
+              <p class="m-0">
+                <span class="close" ng-click="song.delete(user)">&times;</span>
+                <span>{{ song.title }}</span>
+              </p>
             </div>
           </div>
         </div>
