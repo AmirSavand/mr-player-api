@@ -81,27 +81,25 @@ app.service("API", function ($http) {
 /**
  * Song class
  */
-app.service("Song", function ($http) {
+app.service("Song", function (API, $http, $rootScope) {
   return function (data) {
     var self = this;
     self.id = data.id;
-    self.user = data.user;
-    self.party = data.party;
     self.url = data.url;
     self.title = null;
     self.thumbnail = null;
     self.isValid = false;
-    self.isFromUser = function (user) {
-      return self.user === user;
-    };
-    self.isFromParty = function (party) {
-      return self.party === party;
-    };
     self.init = function () {
       $http.get("https://noembed.com/embed?url=https://www.youtube.com/watch?v=" + self.url).then(function (data) {
         self.title = data.data.title;
         self.thumbnail = data.data.thumbnail_url.replace("hq", "mq");
         self.isValid = data.data.error ? false : true;
+        $rootScope.$broadcast("mrPlayer.Song.init", self);
+      });
+    };
+    self.delete = function (user) {
+      API.delete("song", { id: self.id, user: user }, null, function () {
+        $rootScope.$broadcast("mrPlayer.Song.delete", self);
       });
     };
     self.init();
@@ -231,13 +229,13 @@ app.controller("MainController", function (API, Song, $interval, $scope, $window
     var payload = {
       key: "party",
       value: $scope.party,
-      last: $scope.songs.length ? $scope.songs[0].id : 0
+      last: $scope.songs.length ? $scope.songs[0].id : 0,
+      limit: 100
     };
     API.get("song", null, payload, function (data) {
       angular.forEach(data.data, function (songData) {
-        $scope.songs.unshift(new Song(songData));
+        new Song(songData);
       });
-      console.log("Loaded", $scope.songs.length, "party songs");
     });
   };
 
@@ -270,8 +268,7 @@ app.controller("MainController", function (API, Song, $interval, $scope, $window
     console.log("Adding song to party...");
     API.post("song", payload, null, function (data) {
       console.log("Added song to party");
-      payload.url = data.data;
-      $scope.songs.unshift(new Song(payload));
+      new Song(data.data);
       form.loading = false;
       form.data.url = null;
     });
@@ -315,6 +312,28 @@ app.controller("MainController", function (API, Song, $interval, $scope, $window
    */
   $scope.$watch(function () { return $window.location.hash; }, function (value) {
     getParty(value.split("/")[1]);
+  });
+
+  /**
+   * Song loaded
+   */
+  $scope.$on("mrPlayer.Song.init", function (event, song) {
+    if (song.isValid) {
+      $scope.songs.unshift(song);
+    } else {
+      song.delete($scope.user);
+    }
+  });
+
+  /**
+   * Song deleted
+   */
+  $scope.$on("mrPlayer.Song.delete", function (event, song) {
+    console.log("Called");
+    var index = $scope.songs.indexOf(song);
+    if (index != -1) {
+      $scope.songs.splice(index, 1);
+    }
   });
 
   /**
