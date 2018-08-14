@@ -38,6 +38,6 @@ else if ($method === "DELETE") {
 
         $db->query("DELETE FROM song WHERE id=$id AND user=$user");
 
-        response(null, 200);
+        response(null, $db->affected() == 1 ? 200 : 404);
     }
 }
