@@ -30,3 +30,13 @@ body {
 .border {
     border-width: 2px !important;
 }
+
+.card .close {
+    opacity: 0;
+    text-shadow: none;
+    margin-top: -4px;
+}
+
+.card:hover .close {
+    opacity: 0.25;
+}
