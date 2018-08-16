@@ -90,7 +90,7 @@
 
         <!-- Songs -->
         <div class="card mb-2"
-          ng-repeat="song in songs | orderBy:'id' track by $index"
+          ng-repeat="song in songs track by $index"
           ng-class="{'bg-dark text-light': song.id == currentSong.id}">
           <div class="media card-body">
             <img width="128"

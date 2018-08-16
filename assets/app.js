@@ -109,7 +109,7 @@ app.service("Song", function (API, $http, $rootScope) {
 /**
  * Main controller
  */
-app.controller("MainController", function (API, Song, $interval, $scope, $window) {
+app.controller("MainController", function (API, Song, $interval, $scope, $window, $filter) {
 
   /**
    * Loaded controller
@@ -229,9 +229,12 @@ app.controller("MainController", function (API, Song, $interval, $scope, $window
     var payload = {
       key: "party",
       value: $scope.party,
-      last: $scope.songs.length ? $scope.songs[0].id : 0,
+      last: 0,
       limit: 100
     };
+    if ($scope.songs.length > 0) {
+      payload.last = $scope.songs[$scope.song.length - 1];
+    }
     API.get("song", null, payload, function (data) {
       angular.forEach(data.data, function (songData) {
         new Song(songData);
@@ -319,10 +322,11 @@ app.controller("MainController", function (API, Song, $interval, $scope, $window
    */
   $scope.$on("mrPlayer.Song.init", function (event, song) {
     if (song.isValid) {
-      $scope.songs.unshift(song);
+      $scope.songs.push(song);
     } else {
       song.delete($scope.user);
     }
+    $scope.songs = $filter("orderBy")($scope.songs, "id");
   });
 
   /**
