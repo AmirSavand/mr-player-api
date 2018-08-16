@@ -98,6 +98,9 @@ app.service("Song", function (API, $http, $rootScope) {
       });
     };
     self.delete = function (user) {
+      if (!confirm("Are you sure?")) {
+        return;
+      }
       API.delete("song", { id: self.id, user: user }, null, function () {
         $rootScope.$broadcast("mrPlayer.Song.delete", self);
       });
