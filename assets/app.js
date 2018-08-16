@@ -103,6 +103,8 @@ app.service("Song", function (API, $http, $rootScope) {
       }
       API.delete("song", { id: self.id, user: user }, null, function () {
         $rootScope.$broadcast("mrPlayer.Song.delete", self);
+      }, function () {
+        alert("You can't delete others videos.");
       });
     };
     self.init();
