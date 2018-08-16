@@ -42,7 +42,7 @@ if ($is_localhost) {
 function response($data, $status=200) {
     http_response_code($status);
     if ($data != null) {
-        print(json_encode($data));
+        print(json_encode($data, JSON_NUMERIC_CHECK));
     }
 }
 
