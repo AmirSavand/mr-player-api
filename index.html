@@ -67,11 +67,8 @@
         <!-- Player -->
         <div class="card mb-2">
           <div class="card-body">
-            <div class="player embed-responsive embed-responsive-16by9">
-              <youtube-video player="player"
-                video-id="currentSong.url"
-                player-vars="playerConfig">
-              </youtube-video>
+            <div class="player embed-responsive embed-responsive-16by9" ng-if="songs">
+              <youtube-video video-id="'nothing'" player-vars="playerConfig"></youtube-video>
             </div>
           </div>
         </div>
