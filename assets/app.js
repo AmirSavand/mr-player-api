@@ -283,10 +283,21 @@ app.controller("MainController", function (API, Song, $interval, $scope, $window
   };
 
   /**
-   * Play song via player
+   * Play song and update variable
    */
   $scope.playSong = function (song) {
-    $scope.currentSong = song;
+    if (song) {
+      console.log("Playing selected song");
+      $scope.currentSong = song;
+    } else {
+      console.log("Playing next song");
+      var nextIndex = $scope.songs.indexOf($scope.currentSong) + 1;
+      if (nextIndex >= $scope.songs.length) {
+        nextIndex = 0;
+      }
+      $scope.currentSong = $scope.songs[nextIndex];
+    }
+    $scope.player.loadVideoById($scope.currentSong.url);
   };
 
   /**
@@ -303,16 +314,20 @@ app.controller("MainController", function (API, Song, $interval, $scope, $window
   };
 
   /**
-   * Player video ended
+   * Video player ready
+   */
+  $scope.$on("youtube.player.ready", function (event, player) {
+    console.log("Video player is ready");
+    $scope.player = player;
+    $scope.playSong();
+  });
+
+  /**
+   * Video player ended
    */
   $scope.$on("youtube.player.ended", function (event, player) {
-    console.log("Video ended, playing next video.");
-    var nextIndex = $scope.songs.indexOf($scope.currentSong) + 1;
-    if (nextIndex >= $scope.songs.length) {
-      nextIndex = 0;
-    }
-    $scope.currentSong = $scope.songs[nextIndex];
-    player.playVideo();
+    console.log("Video player ended");
+    $scope.playSong();
   });
 
   /**
