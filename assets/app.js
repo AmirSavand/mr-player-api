@@ -238,7 +238,7 @@ app.controller("MainController", function (API, Song, $interval, $scope, $window
       limit: 100
     };
     if ($scope.songs.length > 0) {
-      payload.last = $scope.songs[$scope.song.length - 1];
+      payload.last = $scope.songs[$scope.songs.length - 1];
     }
     API.get("song", null, payload, function (data) {
       angular.forEach(data.data, function (songData) {
