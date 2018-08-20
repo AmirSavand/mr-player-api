@@ -59,49 +59,34 @@
   <!-- Main container -->
   <div class="container py-5">
 
-    <!-- Sides -->
-    <div class="row">
-
-      <!-- Left side -->
-      <div class="col-lg-7">
-
-        <!-- Player -->
-        <div class="card mb-2">
-          <div class="card-body">
-            <div class="player embed-responsive embed-responsive-16by9" ng-if="songs">
-              <youtube-video video-id="'nothing'" player-vars="playerConfig"></youtube-video>
-            </div>
-          </div>
+    <!-- Player -->
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="player embed-responsive embed-responsive-16by9" ng-if="songs">
+          <youtube-video video-id="'nothing'" player-vars="playerConfig"></youtube-video>
         </div>
       </div>
+    </div>
 
-      <!-- Right side -->
-      <div class="col-lg-5">
+    <!-- Input -->
+    <form ng-submit="addSong(form)" class="mb-3">
+      <input type="text"
+        class="form-control form-control-lg"
+        ng-model="form.data.url"
+        ng-disabled="form.loading"
+        placeholder="https://www.youtube.com..." />
+    </form>
 
-        <!-- Input -->
-        <form ng-submit="addSong(form)" class="mb-2">
-          <input type="text"
-            class="form-control form-control-lg"
-            ng-model="form.data.url"
-            ng-disabled="form.loading"
-            placeholder="https://www.youtube.com..." />
-        </form>
-
-        <!-- Songs -->
-        <div class="card mb-2"
-          ng-repeat="song in songs track by $index"
-          ng-class="{'bg-dark text-light': song.id == currentSong.id}">
-          <div class="media card-body">
-            <img width="128"
-              class="mr-2 rounded"
-              ng-src="{{ song.thumbnail }}"
-              ng-click="playSong(song)">
-            <div class="media-body">
-              <p class="m-0">
-                <span class="close" ng-click="song.delete(user)">&times;</span>
-                <span>{{ song.title }}</span>
-              </p>
-            </div>
+    <!-- Songs -->
+    <div class="row songs">
+      <div class="col-lg-3 col-md-4 col-sm-6" ng-repeat="song in songs track by $index">
+        <div class="card mb-2" ng-class="{'bg-dark text-light': song.id == currentSong.id}">
+          <img class="card-img-top" ng-src="{{ song.thumbnail }}" ng-click="playSong(song)">
+          <div class="card-body p-2">
+            <p class="card-text">
+              <span class="close" ng-click="song.delete(user)">&times;</span>
+              <span>{{ song.title }}</span>
+            </p>
           </div>
         </div>
       </div>
