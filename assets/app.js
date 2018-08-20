@@ -353,7 +353,7 @@ app.controller("MainController", function (API, Song, $interval, $scope, $window
    * Song deleted
    */
   $scope.$on("mrPlayer.Song.delete", function (event, song) {
-    console.log("Called");
+    console.log("Deleted song", song.url);
     var index = $scope.songs.indexOf(song);
     if (index != -1) {
       $scope.songs.splice(index, 1);
