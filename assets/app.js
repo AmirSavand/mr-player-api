@@ -114,7 +114,7 @@ app.service("Song", function (API, $http, $rootScope) {
 /**
  * Main controller
  */
-app.controller("MainController", function (API, Song, $interval, $scope, $window, $filter) {
+app.controller("MainController", function (API, Song, $timeout, $interval, $scope, $window, $filter) {
 
   /**
    * Loaded controller
@@ -248,6 +248,13 @@ app.controller("MainController", function (API, Song, $interval, $scope, $window
   };
 
   /**
+   * Grid items
+   */
+  var grid = function () {
+    angular.element(".card").matchHeight();
+  };
+
+  /**
    * Init function
    */
   var init = function () {
@@ -347,6 +354,7 @@ app.controller("MainController", function (API, Song, $interval, $scope, $window
       song.delete($scope.user);
     }
     $scope.songs = $filter("orderBy")($scope.songs, "id");
+    $timeout(grid);
   });
 
   /**
