@@ -105,8 +105,8 @@ app.service("Song", function (API, $http, $rootScope) {
       }
       API.delete("delete-song", { id: self.id, user: user }, null, function () {
         $rootScope.$broadcast("mrPlayer.Song.delete", self);
-      }, function () {
-        alert("You can't delete others videos.");
+      }, function (data) {
+        alert(data.data.message);
       });
     };
     self.init();
@@ -285,6 +285,9 @@ app.controller("MainController", function (API, Song, $timeout, $interval, $scop
       new Song(data.data);
       form.loading = false;
       form.data.url = null;
+    }, function (data) {
+      form.loading = false;
+      alert(data.data.message);
     });
   };
 

@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from marshmallow import Schema, fields
 
 import settings
-from utils import get_youtube_id
+from utils import get_youtube_id, TEXT
 
 app = Flask(__name__)
 app.config.from_object(settings)
@@ -47,7 +47,7 @@ def songs():
 
     if not party:
         return jsonify({
-            'party': 'This field is required.',
+            'party': TEXT.ERROR.REQUIRED,
         }), http.HTTPStatus.BAD_REQUEST
 
     result: list = Song.query.add_columns('id', 'url').filter(Song.party == party, Song.id > last).limit(limit)
@@ -65,16 +65,18 @@ def add_song():
 
     if not user or not party or not url:
         return jsonify({
-            'user': 'This field is required.',
-            'party': 'This field is required.',
-            'url': 'This field is required.',
+            'message': TEXT.ERROR.GENERAL,
+            'user': TEXT.ERROR.REQUIRED,
+            'party': TEXT.ERROR.REQUIRED,
+            'url': TEXT.ERROR.REQUIRED,
         }), http.HTTPStatus.BAD_REQUEST
 
     song: Song = Song(user, party, url)
 
     if not song.is_valid():
         return jsonify({
-            'url': 'This field is invalid.'
+            'message': TEXT.ERROR.YOUTUBE,
+            'url': TEXT.ERROR.INVALID
         }), http.HTTPStatus.BAD_REQUEST
 
     db.session.add(song)
@@ -92,19 +94,19 @@ def delete_song():
 
     if not id_ or not user:
         return jsonify({
-            'id': 'This field is required.',
-            'user': 'This field is required.',
+            'id': TEXT.ERROR.REQUIRED,
+            'user': TEXT.ERROR.REQUIRED,
         }), http.HTTPStatus.BAD_REQUEST
 
     song: Song = Song.query.filter_by(id=id_, user=user)
 
     if not song.scalar():
-        return jsonify({'error': 'Song does not exist.'}), http.HTTPStatus.NOT_FOUND
+        return jsonify({'message': TEXT.ERROR.SONG}), http.HTTPStatus.NOT_FOUND
 
     song.delete()
     db.session.commit()
 
-    return jsonify({'success': 'Song deleted.'}), http.HTTPStatus.ACCEPTED
+    return jsonify({'message': 'Song deleted.'}), http.HTTPStatus.ACCEPTED
 
 
 @app.route('/api/generate', methods=['GET', ])
@@ -117,7 +119,7 @@ def generate():
 
 @app.route('/api')
 def api():
-    return jsonify('You are far away from home...')
+    return jsonify(TEXT.API)
 
 
 @app.route('/')

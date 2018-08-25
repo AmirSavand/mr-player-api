@@ -6,6 +6,17 @@ YOUTUBE_DOMAINS = [
 ]
 
 
+class TEXT:
+    API = 'You are far away from home...'
+
+    class ERROR:
+        INVALID = 'This field is invalid.'
+        REQUIRED = 'This field is required.'
+        YOUTUBE = 'This is not a valid YouTube video URL.'
+        SONG = 'This song does not exist anymore.'
+        GENERAL = 'Something is wrong, try again.'
+
+
 def get_youtube_id(url_string: str):
     # Make sure all the URL start with a valid scheme
     if not url_string.lower().startswith('http'):
