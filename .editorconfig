@@ -11,5 +11,5 @@ insert_final_newline = true
 [*.css]
 indent_size = 4
 
-[*.php]
+[*.py]
 indent_size = 4
