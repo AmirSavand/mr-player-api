@@ -1,2 +1,5 @@
+*.pyc
+*.sqlite3
+.idea/
+.vscode/
 node_modules/
-env.ini
