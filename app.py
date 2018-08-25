@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from marshmallow import Schema, fields
 
 import settings
+from utils import get_youtube_id
 
 app = Flask(__name__)
 app.config.from_object(settings)
@@ -65,6 +66,8 @@ def add_song():
             'party': 'This field is required.',
             'url': 'This field is required.',
         }), http.HTTPStatus.BAD_REQUEST
+
+    url = get_youtube_id(url)
 
     song: Song = Song(user, party, url)
     db.session.add(song)
