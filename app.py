@@ -50,7 +50,7 @@ def songs():
             'party': 'This field is required.',
         }), http.HTTPStatus.BAD_REQUEST
 
-    result = Song.query.add_columns('id', 'url').filter(Song.party == party, Song.id > last).limit(limit)
+    result: list = Song.query.add_columns('id', 'url').filter(Song.party == party, Song.id > last).limit(limit)
 
     return jsonify(song_schema.dump(result, many=True)[0])
 
