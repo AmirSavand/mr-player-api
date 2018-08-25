@@ -342,7 +342,10 @@ app.controller("MainController", function (API, Song, $timeout, $interval, $scop
    * Party changed from URL
    */
   $scope.$watch(function () { return $window.location.hash; }, function (value) {
-    getParty(value.split("/")[1].toUpperCase());
+    var newParty = value.split("/")[1];
+    if (newParty) {
+      getParty(newParty.toUpperCase());
+    }
   });
 
   /**
