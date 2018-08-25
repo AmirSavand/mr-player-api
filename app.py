@@ -20,10 +20,13 @@ class Song(db.Model):
     party = db.Column(db.String(50))
     url = db.Column(db.String(50))
 
+    def is_valid(self):
+        return self.url is not None
+
     def __init__(self, user: str, party: str, url: str):
         self.user = user
         self.party = party
-        self.url = url
+        self.url = get_youtube_id(url)
 
 
 class SongSchema(Schema):
@@ -67,9 +70,13 @@ def add_song():
             'url': 'This field is required.',
         }), http.HTTPStatus.BAD_REQUEST
 
-    url = get_youtube_id(url)
-
     song: Song = Song(user, party, url)
+
+    if not song.is_valid():
+        return jsonify({
+            'url': 'This field is invalid.'
+        }), http.HTTPStatus.BAD_REQUEST
+
     db.session.add(song)
     db.session.commit()
 
