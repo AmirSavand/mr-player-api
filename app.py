@@ -98,15 +98,15 @@ def delete_song():
             'user': TEXT.ERROR.REQUIRED,
         }), http.HTTPStatus.BAD_REQUEST
 
-    song: Song = Song.query.filter_by(id=id_, user=user)
+    song: Song = Song.query.filter(Song.id == id_).scalar()
 
-    if not song.scalar():
+    if song is None:
         return jsonify({'message': TEXT.ERROR.SONG}), http.HTTPStatus.NOT_FOUND
 
-    song.delete()
+    db.session.delete(song)
     db.session.commit()
 
-    return jsonify({'message': 'Song deleted.'}), http.HTTPStatus.ACCEPTED
+    return '', http.HTTPStatus.ACCEPTED
 
 
 @app.route('/api/generate', methods=['GET', ])
