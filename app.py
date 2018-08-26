@@ -13,6 +13,8 @@ app.config.from_object(settings)
 
 db = SQLAlchemy(app)
 
+application = app
+
 
 class Song(db.Model):
     id = db.Column(db.Integer, primary_key=True)
