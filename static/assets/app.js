@@ -308,6 +308,8 @@ app.controller("MainController", function (API, Song, $timeout, $interval, $scop
     }
     if ($scope.currentSong) {
       $scope.player.loadVideoById($scope.currentSong.url);
+    $scope.toTop = function() {
+        angular.element("html, body").animate({ scrollTop: 0 });
     }
   };
 
