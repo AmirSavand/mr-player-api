@@ -308,8 +308,6 @@ app.controller("MainController", function (API, Song, $timeout, $interval, $scop
     }
     if ($scope.currentSong) {
       $scope.player.loadVideoById($scope.currentSong.url);
-    $scope.toTop = function() {
-        angular.element("html, body").animate({ scrollTop: 0 });
     }
   };
 
@@ -324,6 +322,14 @@ app.controller("MainController", function (API, Song, $timeout, $interval, $scop
       }
     });
     return users;
+  };
+
+
+  /**
+   * Scroll to top button
+   */
+  $scope.toTop = function () {
+    angular.element("html, body").animate({ scrollTop: 0 });
   };
 
   /**
@@ -376,17 +382,17 @@ app.controller("MainController", function (API, Song, $timeout, $interval, $scop
       $scope.songs.splice(index, 1);
     }
   });
-    /**
-     * Check for scroll and to top button
-     */
-    angular.element($window).bind("scroll", function(event) {
-        if (angular.element($window).scrollTop() > 50) {
-            $scope.scrolled = true;
-        } else {
-            $scope.scrolled = false;
-        }
-        $scope.$apply();
-    });
+  /**
+   * Check for scroll and to top button
+   */
+  angular.element($window).bind("scroll", function (event) {
+    if (angular.element($window).scrollTop() > 50) {
+      $scope.scrolled = true;
+    } else {
+      $scope.scrolled = false;
+    }
+    $scope.$apply();
+  });
 
   /**
    * Update song list
