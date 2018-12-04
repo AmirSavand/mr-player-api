@@ -21,9 +21,12 @@ from rest_framework_jwt.views import obtain_jwt_token
 
 from account.views import UserViewSet
 from mrp.settings import ADMIN_URL
+from song.views import SongViewSet, SongPartyViewSet
 
 router = routers.DefaultRouter()
 router.register('users', UserViewSet)
+router.register('songs', SongViewSet)
+router.register('song-parties', SongPartyViewSet)
 
 urlpatterns = router.urls
 urlpatterns += [
