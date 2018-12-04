@@ -1,6 +1,6 @@
-# MR Player
+# MR Player API
 
-MR Player (Multi Request Player) takes a playlist from a party and plays each users song.
+RESTful API for [mr-player](https://github.com/AmirSavand/mr-player).
 
 This project is using Python (Django with Django Rest Framework) for back-end and Angular for front-end.
 
