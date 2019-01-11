@@ -1,6 +1,16 @@
+from uuid import UUID
+
 from django.contrib.auth.models import User
 from rest_framework import permissions
 from rest_framework.pagination import PageNumberPagination
+
+
+def validate_uuid4(uuid_string):
+    try:
+        UUID(uuid_string, version=4)
+    except ValueError:
+        return False
+    return True
 
 
 class StandardPagination(PageNumberPagination):
@@ -14,7 +24,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
 
-        # Read permissions are allowed to any request safe request (GET, HEAD, OPTIONS)
+        # Read permissions are allowed to any safe request (GET, HEAD, OPTIONS)
         if request.method in permissions.SAFE_METHODS:
             return True
 
@@ -28,3 +38,20 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
         # Write permissions are only allowed to the authenticated user
         return obj == request.user
+
+
+class IsOwner(permissions.BasePermission):
+    """
+    Custom permission to only allow owners of object.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        return request.user.is_authenticated and obj.user == request.user
+
+
+class Regex:
+    """
+    Regex patterns for songs source.
+    """
+    YOUTUBE = r'(https?://)?(www\.)?(youtube|youtu)\.(com|be)/(watch\?v=|embed/|v/|.+\?v=)?([^&=%\?]{11})'
+    SOUNDCLOUD = r'^(https?:\/\/)?(www.)?(m\.)?soundcloud\.com\/[\w\-\.]+(\/)+[\w\-\.]+/?$'
