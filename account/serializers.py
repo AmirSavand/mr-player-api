@@ -14,6 +14,7 @@ class AccountSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=True)
     account = AccountSerializer(read_only=True)
 
     class Meta:
@@ -28,6 +29,8 @@ class UserSerializer(serializers.ModelSerializer):
             'password',
         )
         extra_kwargs = {
+            'date_joined': {'read_only': True},
+            'last_login': {'read_only': True},
             'password': {'write_only': True},
         }
 
