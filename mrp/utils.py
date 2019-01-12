@@ -10,6 +10,8 @@ def validate_uuid4(uuid_string):
         UUID(uuid_string, version=4)
     except ValueError:
         return False
+    except TypeError:
+        return False
     return True
 
 
