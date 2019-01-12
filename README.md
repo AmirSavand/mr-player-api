@@ -1,4 +1,6 @@
-# MR Player API
+# [MR Player API](https://mrplayer.savandbros.com)
+
+Host and join parties and keep shuffling sick songs.
 
 RESTful API for [mr-player](https://github.com/AmirSavand/mr-player).
 
