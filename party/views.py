@@ -14,7 +14,7 @@ class PartyViewSet(viewsets.ModelViewSet):
     create:
     Create party and join it.
     """
-    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly,)
+    permission_classes = (IsOwnerOrReadOnly,)
 
     def get_queryset(self):
         if self.action is 'list':
