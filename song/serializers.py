@@ -1,10 +1,8 @@
 import re
 
 import requests
-from django.http import request
 from requests import Response
 from rest_framework import serializers
-from rest_framework.utils import json
 
 from account.serializers import UserSerializer
 from mrp.utils import Regex
