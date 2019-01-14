@@ -1,5 +1,4 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
 
 from mrp.utils import IsOwnerOrReadOnly
 from party.models import Party, PartyUser
@@ -29,7 +28,6 @@ class PartyViewSet(viewsets.ModelViewSet):
 
 class PartyUserViewSet(viewsets.ModelViewSet):
     queryset = PartyUser.objects.all()
-    serializer_class = PartyUserSerializer
     permission_classes = (IsOwnerOrReadOnly,)
     filter_fields = ('party', 'user',)
 
