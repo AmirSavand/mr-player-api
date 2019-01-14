@@ -1,6 +1,10 @@
 import re
 
+import requests
+from django.http import request
+from requests import Response
 from rest_framework import serializers
+from rest_framework.utils import json
 
 from account.serializers import UserSerializer
 from mrp.utils import Regex
@@ -46,5 +50,14 @@ class SongCreateSerializer(serializers.ModelSerializer):
         # Source didn't match any player
         else:
             raise serializers.ValidationError({'error': 'Invalid YouTube or SoundCloud URL.'})
+
+        # Get song name if not set
+        if not data['name']:
+            if data['player'] == SongPlayer.YOUTUBE:
+                response: Response = requests.get('https://youtube.com/oembed', {
+                    'url': data['source'],
+                    'format': 'json',
+                })
+                data['name'] = response.json()['title']
 
         return super().create(data)

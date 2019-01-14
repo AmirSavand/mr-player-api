@@ -19,6 +19,7 @@ class Song(models.Model):
     party = models.ForeignKey(Party, on_delete=models.CASCADE)
     player = models.IntegerField(choices=SONG_PLAYER_CHOICES, default=SongPlayer.YOUTUBE)
     source = models.URLField()
+    name = models.CharField(max_length=200, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
