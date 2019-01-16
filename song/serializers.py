@@ -50,7 +50,7 @@ class SongCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'error': 'Invalid YouTube or SoundCloud URL.'})
 
         # Get song name if not set
-        if not data['name']:
+        if not data.get('name'):
             if data['player'] == SongPlayer.YOUTUBE:
                 response: Response = requests.get('https://youtube.com/oembed', {
                     'url': data['source'],
