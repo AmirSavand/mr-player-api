@@ -27,6 +27,8 @@ class PartyCreateSerializer(serializers.ModelSerializer):
             'id',
             'user',
             'title',
+            'name',
+            'date',
         )
         extra_kwargs = {
             'title': {'write_only': True}
