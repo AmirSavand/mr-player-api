@@ -36,3 +36,16 @@ class PartyUser(models.Model):
         verbose_name_plural = 'Party users'
         ordering = ('id',)
         unique_together = (('party', 'user'),)
+
+
+class PartyCategory(models.Model):
+    party = models.ForeignKey(Party, related_name='party_category', on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return '{name} of {party}'.format(name=self.name, party=self.party)
+
+    class Meta:
+        verbose_name_plural = 'Party categories'
+        ordering = ('id',)
+        unique_together = (('party', 'name'),)
