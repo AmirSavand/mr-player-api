@@ -21,6 +21,7 @@ class Party(models.Model):
 
     class Meta:
         verbose_name_plural = 'Parties'
+        ordering = ('id',)
 
 
 class PartyUser(models.Model):
