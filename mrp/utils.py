@@ -17,6 +17,7 @@ def validate_uuid4(uuid_string):
 
 class StandardPagination(PageNumberPagination):
     page_size_query_param = 'limit'
+    page_size = 100
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
