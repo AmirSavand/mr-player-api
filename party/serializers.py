@@ -1,7 +1,19 @@
 from rest_framework import serializers
 
 from account.serializers import UserSerializer
-from party.models import Party, PartyUser
+from party.models import Party, PartyUser, PartyCategory
+
+
+class PartyCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PartyCategory
+        fields = (
+            'id',
+            'party',
+            'name',
+        )
+
+
 
 
 class PartySerializer(serializers.ModelSerializer):
