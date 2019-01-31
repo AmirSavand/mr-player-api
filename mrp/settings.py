@@ -137,7 +137,7 @@ PRODUCTION = os.environ.get('DJANGO_PRODUCTION') == 'True'
 DEBUG = os.environ.get('DJANGO_DEBUG') != 'False'
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'some-key')
 ADMIN_URL = os.environ.get('DJANGO_ADMIN_URL', 'admin/')
-ALLOWED_HOSTS.append(os.environ.get('DJANGO_ALLOWED_HOST', '127.0.0.1'))
+ALLOWED_HOSTS.append(os.environ.get('DJANGO_ALLOWED_HOST', 'localhost'))
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
