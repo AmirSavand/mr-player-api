@@ -7,6 +7,7 @@ from party.models import Party, PartyUser
 class PartySerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True, default=serializers.CurrentUserDefault())
     name = serializers.ReadOnlyField()
+    categories = PartyCategoryMinimalSerializer(many=True, source='party_category')
 
     class Meta:
         model = Party
@@ -15,6 +16,7 @@ class PartySerializer(serializers.ModelSerializer):
             'user',
             'name',
             'date',
+            'categories',
         )
 
 
