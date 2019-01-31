@@ -40,3 +40,5 @@ media/
 celerybeat-schedule
 # Ignore Sphinx documentation
 docs/
+# Generated static files
+staticfiles/
