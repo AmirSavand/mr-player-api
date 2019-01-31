@@ -14,6 +14,13 @@ class PartyCategorySerializer(serializers.ModelSerializer):
         )
 
 
+class PartyCategoryMinimalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PartyCategory
+        fields = (
+            'id',
+            'name',
+        )
 
 
 class PartySerializer(serializers.ModelSerializer):
