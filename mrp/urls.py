@@ -6,7 +6,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 
 from account.views import UserViewSet
 from mrp.settings import ADMIN_URL
-from party.views import PartyViewSet, PartyUserViewSet
+from party.views import PartyViewSet, PartyUserViewSet, PartyCategoryViewSet
 from song.views import SongViewSet
 
 router = routers.DefaultRouter()
@@ -14,6 +14,7 @@ router = routers.DefaultRouter()
 router.register('users', UserViewSet, basename='User')
 router.register('parties', PartyViewSet, basename='Party')
 router.register('party-users', PartyUserViewSet, basename='Party Users')
+router.register('party-categories', PartyCategoryViewSet, basename='Party Categories')
 router.register('songs', SongViewSet, basename='Song')
 
 urlpatterns = router.urls
