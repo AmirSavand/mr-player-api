@@ -20,6 +20,11 @@ class StandardPagination(PageNumberPagination):
     page_size = 100
 
 
+class LargePagination(PageNumberPagination):
+    page_size_query_param = 'limit'
+    page_size = 1000
+
+
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """
     Custom permission to only allow owners of an object to edit it.

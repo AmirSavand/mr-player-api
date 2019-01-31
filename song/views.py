@@ -2,7 +2,7 @@ from rest_framework import permissions, exceptions
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, ListModelMixin
 from rest_framework.viewsets import GenericViewSet
 
-from mrp.utils import validate_uuid4
+from mrp.utils import validate_uuid4, LargePagination
 from song.models import Song
 from song.serializers import SongSerializer, SongCreateSerializer
 
@@ -27,6 +27,7 @@ class SongViewSet(CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, ListM
     Get song list by party only.
     """
     permission_classes = (IsSongOrPartyOwnerOrReadOnly,)
+    pagination_class = LargePagination
 
     def get_queryset(self):
         """
