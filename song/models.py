@@ -1,7 +1,7 @@
 from django.db import models
 from rest_framework_jwt.serializers import User
 
-from party.models import Party
+from party.models import Party, PartyCategory
 
 
 class SongPlayer:
@@ -17,6 +17,7 @@ class Song(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     party = models.ForeignKey(Party, on_delete=models.CASCADE)
+    category = models.ForeignKey(PartyCategory, default=None, null=True, on_delete=models.SET_DEFAULT)
     player = models.IntegerField(choices=SONG_PLAYER_CHOICES, default=SongPlayer.YOUTUBE)
     source = models.URLField()
     name = models.CharField(max_length=200, null=True, blank=True)
