@@ -20,6 +20,21 @@ class SongSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class SongMinimalSerializer(serializers.ModelSerializer):
+    user = UserMinimalSerializer()
+
+    class Meta:
+        model = Song
+        fields = (
+            'id',
+            'user',
+            'player',
+            'source',
+            'name',
+            'category',
+        )
+
+
 class SongCreateSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     party = serializers.PrimaryKeyRelatedField(queryset=Party.objects.all())
