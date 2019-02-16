@@ -1,10 +1,9 @@
 from rest_framework import permissions, exceptions
-from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, ListModelMixin
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import ModelViewSet
 
 from mrp.utils import validate_uuid4, LargePagination
 from song.models import Song
-from song.serializers import SongSerializer, SongCreateSerializer
+from song.serializers import SongSerializer, SongCreateSerializer, SongMinimalSerializer, SongUpdateSerializer
 
 
 class IsSongOrPartyOwnerOrReadOnly(permissions.BasePermission):
@@ -21,7 +20,7 @@ class IsSongOrPartyOwnerOrReadOnly(permissions.BasePermission):
         return obj.user == request.user or obj.party.user == request.user
 
 
-class SongViewSet(CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, ListModelMixin, GenericViewSet):
+class SongViewSet(ModelViewSet):
     """
     list:
     Get song list by party only.
@@ -43,4 +42,6 @@ class SongViewSet(CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, ListM
     def get_serializer_class(self):
         if self.action is 'create':
             return SongCreateSerializer
+        if self.action in 'list':
+            return SongMinimalSerializer
         return SongSerializer
