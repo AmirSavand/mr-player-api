@@ -47,7 +47,7 @@ class SongUpdateSerializer(serializers.ModelSerializer):
         category: PartyCategory = validated_data['category']
 
         # Category must be from this party
-        if category and category.party == instance.party:
+        if category and category.party != instance.party:
             raise serializers.ValidationError({'category': 'Invalid category.'})
 
         return super().update(instance, validated_data)
