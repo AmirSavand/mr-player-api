@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 from account.serializers import UserSerializer
 from party.models import Party, PartyUser, PartyCategory
@@ -12,6 +13,13 @@ class PartyCategorySerializer(serializers.ModelSerializer):
             'party',
             'name',
         )
+        validators = [
+            UniqueTogetherValidator(
+                message='Category with this name already exists.',
+                fields=('party', 'name'),
+                queryset=PartyCategory.objects.all(),
+            )
+        ]
 
 
 class PartyCategoryMinimalSerializer(serializers.ModelSerializer):
