@@ -44,4 +44,6 @@ class SongViewSet(ModelViewSet):
             return SongCreateSerializer
         if self.action in 'list':
             return SongMinimalSerializer
+        if self.action in 'update':
+            return SongUpdateSerializer
         return SongSerializer
