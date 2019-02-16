@@ -4,9 +4,9 @@ import requests
 from requests import Response
 from rest_framework import serializers
 
-from account.serializers import UserSerializer
+from account.serializers import UserSerializer, UserMinimalSerializer
 from mrp.utils import Regex
-from party.models import Party
+from party.models import Party, PartyCategory
 from party.serializers import PartySerializer
 from song.models import Song, SongPlayer
 
@@ -33,6 +33,24 @@ class SongMinimalSerializer(serializers.ModelSerializer):
             'name',
             'category',
         )
+
+
+class SongUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Song
+        fields = (
+            'name',
+            'category',
+        )
+
+    def update(self, instance, validated_data):
+        category: PartyCategory = validated_data['category']
+
+        # Category must be from this party
+        if category and category.party == instance.party:
+            raise serializers.ValidationError({'category': 'Invalid category.'})
+
+        return super().update(instance, validated_data)
 
 
 class SongCreateSerializer(serializers.ModelSerializer):
