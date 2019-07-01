@@ -1,5 +1,5 @@
 from rest_framework import viewsets, exceptions
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 
 from mrp.utils import IsOwnerOrReadOnly, validate_uuid4
 from party.models import Party, PartyUser, PartyCategory
@@ -20,7 +20,7 @@ class PartyViewSet(viewsets.ModelViewSet):
     create:
     Create party and join it.
     """
-    permission_classes = (IsOwnerOrReadOnly,)
+    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly,)
 
     def get_queryset(self):
         if self.action is 'list':
