@@ -1,8 +1,8 @@
-# [MR Player API](https://mrplayer.savandbros.com)
+# [PlayzEM API](https://playzem.savandbros.com)
 
 Host and join parties and keep shuffling sick songs.
 
-RESTful API for [mr-player](https://github.com/AmirSavand/mr-player).
+RESTful API for [playzem](https://github.com/AmirSavand/playzem).
 
 This project is using Python (Django with Django Rest Framework) for back-end and Angular for front-end.
 
