@@ -7,7 +7,7 @@ from rest_framework import serializers
 from account.serializers import UserSerializer, UserMinimalSerializer
 from mrp.utils import Regex
 from party.models import Party, PartyCategory
-from party.serializers import PartySerializer
+from party.serializers import PartySerializer, PartyCategoryMinimalSerializer
 from song.models import Song, SongPlayer
 
 
@@ -22,6 +22,7 @@ class SongSerializer(serializers.ModelSerializer):
 
 class SongMinimalSerializer(serializers.ModelSerializer):
     user = UserMinimalSerializer()
+    category = PartyCategoryMinimalSerializer()
 
     class Meta:
         model = Song
