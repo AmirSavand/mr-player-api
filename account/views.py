@@ -1,8 +1,9 @@
 from django.contrib.auth.models import User
-from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.viewsets import GenericViewSet
 
-from account.serializers import UserSerializer
+from account.models import Account
+from account.serializers import UserSerializer, AccountSerializer
 
 
 class UserViewSet(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
@@ -12,6 +13,15 @@ class UserViewSet(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = 'username'
+
+
+class AccountViewSet(UpdateModelMixin, GenericViewSet):
+    """
+    Update user account.
+    """
+    queryset = Account.objects.all()
+    serializer_class = AccountSerializer
+    lookup_field = 'user__username'
 
 
 def jwt_response_payload_handler(token, user=None, request=None) -> dict:
