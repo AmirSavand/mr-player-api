@@ -1,7 +1,6 @@
 from rest_framework import viewsets, exceptions
-from rest_framework.permissions import IsAuthenticated
 
-from mrp.utils import IsOwnerOrReadOnly, validate_uuid4, IsPartyOwnerOrReadOnly
+from mrp.utils import validate_uuid4, IsAuthAndOwnerOrReadOnly, IsAuthAndPartyOwnerOrOwnerOrReadOnly
 from party.models import Party, PartyUser, PartyCategory
 from party.serializers import (
     PartySerializer,
@@ -20,11 +19,13 @@ class PartyViewSet(viewsets.ModelViewSet):
     create:
     Create party and join it.
     """
-    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly,)
+    permission_classes = (IsAuthAndOwnerOrReadOnly,)
 
     def get_queryset(self):
         if self.action is 'list':
-            return Party.objects.filter(user=self.request.user)
+            if self.request.user.is_authenticated:
+                return Party.objects.filter(user=self.request.user)
+            return Party.objects.none()
         return Party.objects.all()
 
     def get_serializer_class(self):
@@ -35,7 +36,7 @@ class PartyViewSet(viewsets.ModelViewSet):
 
 class PartyUserViewSet(viewsets.ModelViewSet):
     queryset = PartyUser.objects.all()
-    permission_classes = (IsPartyOwnerOrReadOnly,)
+    permission_classes = (IsAuthAndPartyOwnerOrOwnerOrReadOnly,)
     filter_fields = ('party', 'user',)
 
     def get_serializer_class(self):
@@ -46,7 +47,7 @@ class PartyUserViewSet(viewsets.ModelViewSet):
 
 class PartyCategoryViewSet(viewsets.ModelViewSet):
     queryset = PartyCategory.objects.all()
-    permission_classes = (IsPartyOwnerOrReadOnly,)
+    permission_classes = (IsAuthAndPartyOwnerOrOwnerOrReadOnly,)
     serializer_class = PartyCategorySerializer
 
     def get_queryset(self):

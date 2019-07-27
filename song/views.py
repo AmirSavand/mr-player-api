@@ -1,23 +1,9 @@
-from rest_framework import permissions, exceptions
+from rest_framework import exceptions
 from rest_framework.viewsets import ModelViewSet
 
-from mrp.utils import validate_uuid4, LargePagination
+from mrp.utils import validate_uuid4, LargePagination, IsAuthAndPartyOwnerOrOwnerOrReadOnly
 from song.models import Song
 from song.serializers import SongSerializer, SongCreateSerializer, SongMinimalSerializer, SongUpdateSerializer
-
-
-class IsSongOrPartyOwnerOrReadOnly(permissions.BasePermission):
-    """
-    Owner of song or party can modify.
-    """
-
-    def has_object_permission(self, request, view, obj):
-        # Read permissions are allowed to any safe request (GET, HEAD, OPTIONS)
-        if request.method in permissions.SAFE_METHODS:
-            return True
-
-        # Write permissions are only allowed to the owner of this object or owner of its party
-        return obj.user == request.user or obj.party.user == request.user
 
 
 class SongViewSet(ModelViewSet):
@@ -25,7 +11,7 @@ class SongViewSet(ModelViewSet):
     list:
     Get song list by party only.
     """
-    permission_classes = (IsSongOrPartyOwnerOrReadOnly,)
+    permission_classes = (IsAuthAndPartyOwnerOrOwnerOrReadOnly,)
     pagination_class = LargePagination
 
     def get_queryset(self):

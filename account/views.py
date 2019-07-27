@@ -4,6 +4,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from account.models import Account
 from account.serializers import UserSerializer, AccountSerializer
+from mrp.utils import IsAuthAndOwnerOrReadOnly
 
 
 class UserViewSet(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
@@ -21,6 +22,7 @@ class AccountViewSet(UpdateModelMixin, GenericViewSet):
     """
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
+    permission_classes = (IsAuthAndOwnerOrReadOnly,)
     lookup_field = 'user__username'
 
 

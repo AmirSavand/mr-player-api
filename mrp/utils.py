@@ -3,6 +3,7 @@ from uuid import UUID
 from django.contrib.auth.models import User
 from rest_framework import permissions
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import BasePermission
 
 
 def validate_uuid4(uuid_string):
@@ -25,59 +26,51 @@ class LargePagination(PageNumberPagination):
     page_size = 1000
 
 
-class IsPartyOwnerOrReadOnly(permissions.BasePermission):
-    """
-    Custom permission to only allow owners of the party of an object to edit it.
-    """
+class IsAuthAndPartyOwnerOrOwnerOrReadOnly(BasePermission):
+
+    def has_permission(self, request, view):
+        return request.user and request.user.is_authenticated
 
     def has_object_permission(self, request, view, obj):
 
-        # Read permissions are allowed to any safe request (GET, HEAD, OPTIONS)
+        # Allow safe methods
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        # Write permissions are only allowed for authenticated users
-        if not request.user.is_authenticated:
-            return False
-
-        # Write permissions are only allowed to the owner of the party of this object
-        if obj.party.user == request.user:
+        # Allow if user is owner of party of object
+        if request.user == obj.party.user:
             return True
 
-        # Write permissions are only allowed to the authenticated user
-        return obj.user == request.user
+        # Allow if user is owner of object
+        return request.user == obj.user
 
 
-class IsOwnerOrReadOnly(permissions.BasePermission):
-    """
-    Custom permission to only allow owners of an object to edit it.
-    """
+class IsAuthAndOwnerOrReadOnly(BasePermission):
+
+    def has_permission(self, request, view):
+        return request.user and request.user.is_authenticated
 
     def has_object_permission(self, request, view, obj):
 
-        # Read permissions are allowed to any safe request (GET, HEAD, OPTIONS)
+        # Allow safe methods
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        # Write permissions are only allowed for authenticated users
-        if not request.user.is_authenticated:
-            return False
-
-        # Write permissions are only allowed to the owner of this object
+        # Allow if user is owner of object
         if type(obj) is not User:
-            return obj.user == request.user
+            return request.user == obj.user
 
-        # Write permissions are only allowed to the authenticated user
-        return obj == request.user
+        # Allow if user is object
+        return request.user == obj
 
 
-class IsOwner(permissions.BasePermission):
-    """
-    Custom permission to only allow owners of object.
-    """
+class IsAuthAndOwner(BasePermission):
+
+    def has_permission(self, request, view):
+        return request.user and request.user.is_authenticated
 
     def has_object_permission(self, request, view, obj):
-        return request.user.is_authenticated and obj.user == request.user
+        return request.user == obj.user
 
 
 class Regex:
