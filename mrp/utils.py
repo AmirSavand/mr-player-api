@@ -25,6 +25,29 @@ class LargePagination(PageNumberPagination):
     page_size = 1000
 
 
+class IsPartyOwnerOrReadOnly(permissions.BasePermission):
+    """
+    Custom permission to only allow owners of the party of an object to edit it.
+    """
+
+    def has_object_permission(self, request, view, obj):
+
+        # Read permissions are allowed to any safe request (GET, HEAD, OPTIONS)
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        # Write permissions are only allowed for authenticated users
+        if not request.user.is_authenticated:
+            return False
+
+        # Write permissions are only allowed to the owner of the party of this object
+        if obj.party.user == request.user:
+            return True
+
+        # Write permissions are only allowed to the authenticated user
+        return obj.user == request.user
+
+
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """
     Custom permission to only allow owners of an object to edit it.

@@ -1,7 +1,7 @@
 from rest_framework import viewsets, exceptions
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 
-from mrp.utils import IsOwnerOrReadOnly, validate_uuid4
+from mrp.utils import IsOwnerOrReadOnly, validate_uuid4, IsPartyOwnerOrReadOnly
 from party.models import Party, PartyUser, PartyCategory
 from party.serializers import (
     PartySerializer,
@@ -35,7 +35,7 @@ class PartyViewSet(viewsets.ModelViewSet):
 
 class PartyUserViewSet(viewsets.ModelViewSet):
     queryset = PartyUser.objects.all()
-    permission_classes = (IsOwnerOrReadOnly,)
+    permission_classes = (IsPartyOwnerOrReadOnly,)
     filter_fields = ('party', 'user',)
 
     def get_serializer_class(self):
@@ -46,8 +46,7 @@ class PartyUserViewSet(viewsets.ModelViewSet):
 
 class PartyCategoryViewSet(viewsets.ModelViewSet):
     queryset = PartyCategory.objects.all()
-    # @fixme Only category party owner should have modification access
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsPartyOwnerOrReadOnly,)
     serializer_class = PartyCategorySerializer
 
     def get_queryset(self):
