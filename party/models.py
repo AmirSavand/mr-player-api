@@ -8,6 +8,7 @@ class Party(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50, null=True, blank=True)
+    description = models.TextField(max_length=2000, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
 
     @property
