@@ -15,10 +15,10 @@ class Account(models.Model):
     def name(self):
         if self.display_name:
             return self.display_name
-        return self
+        return self.user.username
 
     def __str__(self):
-        return self.user.username
+        return self.name
 
 
 @receiver(post_save, sender=User)
