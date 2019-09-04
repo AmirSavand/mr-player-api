@@ -1,6 +1,6 @@
 from rest_framework import viewsets, exceptions
 
-from mrp.utils import validate_uuid4, IsAuthAndOwnerOrReadOnly, IsAuthAndPartyOwnerOrOwnerOrReadOnly
+from mrp.utils import validate_uuid4, IsAuthAndPartyOwnerOrOwnerOrReadOnly, IsOwnerOrReadOnly
 from party.models import Party, PartyUser, PartyCategory
 from party.serializers import (
     PartySerializer,
@@ -12,21 +12,9 @@ from party.serializers import (
 
 
 class PartyViewSet(viewsets.ModelViewSet):
-    """
-    list:
-    Get list of parties owned by authenticated user.
-
-    create:
-    Create party and join it.
-    """
-    permission_classes = (IsAuthAndOwnerOrReadOnly,)
-
-    def get_queryset(self):
-        if self.action is 'list':
-            if self.request.user.is_authenticated:
-                return Party.objects.filter(user=self.request.user)
-            return Party.objects.none()
-        return Party.objects.all()
+    queryset = Party.objects.all()
+    permission_classes = (IsOwnerOrReadOnly,)
+    filter_fields = ('status', 'user',)
 
     def get_serializer_class(self):
         if self.action in ['create', 'update']:
