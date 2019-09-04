@@ -43,6 +43,7 @@ class PartySerializer(serializers.ModelSerializer):
             'user',
             'name',
             'description',
+            'status',
             'date',
             'categories',
         )
@@ -59,6 +60,7 @@ class PartyCreateSerializer(serializers.ModelSerializer):
             'title',
             'name',
             'description',
+            'status',
             'date',
         )
         extra_kwargs = {
