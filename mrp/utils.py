@@ -74,8 +74,6 @@ class IsAuthAndOwner(BasePermission):
 
 
 class Regex:
-    """
-    Regex patterns for songs source.
-    """
     YOUTUBE = r'(https?://)?(www\.)?(youtube|youtu)\.(com|be)/(watch\?v=|embed/|v/|.+\?v=)?([^&=%\?]{11})'
     SOUNDCLOUD = r'^(https?:\/\/)?(www.)?(m\.)?soundcloud\.com\/[\w\-\.]+(\/)+[\w\-\.]+/?$'
+    IMGUR = r'(https?:)?\/\/(\w+\.)?imgur\.com\/(\S*)(\.[a-zA-Z]{3})'
