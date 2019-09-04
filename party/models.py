@@ -9,6 +9,8 @@ class Party(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50, null=True, blank=True)
     description = models.TextField(max_length=2000, null=True, blank=True)
+    image = models.URLField(max_length=100, blank=True, null=True)
+    cover = models.URLField(max_length=100, blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)
 
     @property
