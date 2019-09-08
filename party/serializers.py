@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.validators import UniqueTogetherValidator
 
 from account.serializers import UserSerializer
@@ -23,21 +24,12 @@ class PartyCategorySerializer(serializers.ModelSerializer):
         ]
 
 
-class PartyCategoryMinimalSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PartyCategory
-        fields = (
-            'id',
-            'name',
-        )
-
-
 class PartySerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True, default=serializers.CurrentUserDefault())
     name = serializers.ReadOnlyField()
     image = serializers.RegexField(Regex.IMGUR, allow_blank=True, allow_null=True)
     cover = serializers.RegexField(Regex.IMGUR, allow_blank=True, allow_null=True)
-    categories = PartyCategoryMinimalSerializer(many=True, source='party_category')
+    categories = PrimaryKeyRelatedField(many=True, source='party_category', queryset=PartyCategory.objects.all())
 
     class Meta:
         model = Party
