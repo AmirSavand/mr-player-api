@@ -1,7 +1,8 @@
+from django.db.models import QuerySet, Q
 from rest_framework import viewsets, exceptions
 
-from mrp.utils import validate_uuid4, IsAuthAndOwnerOrReadOnly, IsAuthAndPartyOwnerOrOwnerOrReadOnly
-from party.models import Party, PartyUser, PartyCategory
+from mrp.utils import validate_uuid4, IsAuthAndPartyOwnerOrOwnerOrReadOnly, IsAuthAndOwnerOrReadOnly
+from party.models import Party, PartyUser, PartyCategory, PartyStatus
 from party.serializers import (
     PartySerializer,
     PartyUserSerializer,
@@ -12,21 +13,23 @@ from party.serializers import (
 
 
 class PartyViewSet(viewsets.ModelViewSet):
-    """
-    list:
-    Get list of parties owned by authenticated user.
-
-    create:
-    Create party and join it.
-    """
+    queryset = Party.objects.all()
     permission_classes = (IsAuthAndOwnerOrReadOnly,)
+    filter_fields = ('status', 'user',)
 
     def get_queryset(self):
+        queryset: QuerySet = self.queryset
         if self.action is 'list':
             if self.request.user.is_authenticated:
-                return Party.objects.filter(user=self.request.user)
-            return Party.objects.none()
-        return Party.objects.all()
+                queryset = queryset.filter(Q(user=self.request.user) | Q(status=PartyStatus.PUBLIC))
+            else:
+                queryset = queryset.filter(status=PartyStatus.PUBLIC)
+        elif self.action is 'retrieve':
+            if self.request.user.is_authenticated:
+                queryset = queryset.filter(Q(user=self.request.user) | ~Q(status=PartyStatus.CLOSE))
+            else:
+                queryset = queryset.exclude(status=PartyStatus.CLOSE)
+        return queryset
 
     def get_serializer_class(self):
         if self.action in ['create', 'update']:
