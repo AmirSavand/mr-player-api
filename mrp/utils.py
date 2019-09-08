@@ -48,26 +48,13 @@ class IsAuthAndPartyOwnerOrOwnerOrReadOnly(BasePermission):
 class IsAuthAndOwnerOrReadOnly(BasePermission):
 
     def has_permission(self, request, view):
-        return request.user and request.user.is_authenticated
-
-    def has_object_permission(self, request, view, obj):
 
         # Allow safe methods
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        # Allow if user is owner of object
-        if type(obj) is not User:
-            return request.user == obj.user
-
-        # Allow if user is object
-        return request.user == obj
-
-
-class IsOwnerOrReadOnly(BasePermission):
-
-    def has_permission(self, request, view):
-        return request.method in permissions.SAFE_METHODS
+        # Allow authenticated user
+        return request.user and request.user.is_authenticated
 
     def has_object_permission(self, request, view, obj):
 
