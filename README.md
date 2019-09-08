@@ -13,5 +13,6 @@ Create the virtual env with Python 3.7 and run these commands:
 ```bash
 > pip install -r requirements.txt
 > python manage.py migrate
+> python manage.py createsuerpuser
 > python manage.py runserver
 ```
