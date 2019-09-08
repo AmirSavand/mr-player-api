@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from account.serializers import UserSerializer
+from mrp.utils import Regex
 from party.models import Party, PartyUser, PartyCategory
 
 
@@ -34,6 +35,8 @@ class PartyCategoryMinimalSerializer(serializers.ModelSerializer):
 class PartySerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True, default=serializers.CurrentUserDefault())
     name = serializers.ReadOnlyField()
+    image = serializers.RegexField(Regex.IMGUR, allow_blank=True, allow_null=True)
+    cover = serializers.RegexField(Regex.IMGUR, allow_blank=True, allow_null=True)
     categories = PartyCategoryMinimalSerializer(many=True, source='party_category')
 
     class Meta:
@@ -44,6 +47,8 @@ class PartySerializer(serializers.ModelSerializer):
             'name',
             'description',
             'status',
+            'image',
+            'cover',
             'date',
             'categories',
         )
@@ -51,6 +56,8 @@ class PartySerializer(serializers.ModelSerializer):
 
 class PartyCreateSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    image = serializers.RegexField(Regex.IMGUR, allow_blank=True, allow_null=True)
+    cover = serializers.RegexField(Regex.IMGUR, allow_blank=True, allow_null=True)
 
     class Meta:
         model = Party
@@ -61,6 +68,8 @@ class PartyCreateSerializer(serializers.ModelSerializer):
             'name',
             'description',
             'status',
+            'image',
+            'cover',
             'date',
         )
         extra_kwargs = {

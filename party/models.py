@@ -22,6 +22,8 @@ class Party(models.Model):
     title = models.CharField(max_length=50, null=True, blank=True)
     description = models.TextField(max_length=2000, null=True, blank=True)
     status = models.IntegerField(choices=PARTY_STATUS_CHOICES, default=PartyStatus.PUBLIC)
+    image = models.URLField(max_length=100, blank=True, null=True)
+    cover = models.URLField(max_length=100, blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)
 
     @property
