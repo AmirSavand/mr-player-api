@@ -2,8 +2,8 @@ from rest_framework import exceptions
 from rest_framework.viewsets import ModelViewSet
 
 from mrp.utils import validate_uuid4, LargePagination, IsAuthAndPartyOwnerOrOwnerOrReadOnly
-from song.models import Song
-from song.serializers import SongSerializer, SongCreateSerializer, SongMinimalSerializer, SongUpdateSerializer
+from song.models import Song, SongCategory
+from song.serializers import SongSerializer, SongCreateSerializer, SongMinimalSerializer, SongCategorySerializer
 
 
 class SongViewSet(ModelViewSet):
@@ -26,10 +26,14 @@ class SongViewSet(ModelViewSet):
         return Song.objects.all()
 
     def get_serializer_class(self):
-        if self.action is 'create':
+        if self.action in ['create', 'update']:
             return SongCreateSerializer
         if self.action in 'list':
             return SongMinimalSerializer
-        if self.action in 'update':
-            return SongUpdateSerializer
         return SongSerializer
+
+
+class SongCategoryViewSet(ModelViewSet):
+    queryset = SongCategory.objects.all()
+    permission_classes = (IsAuthAndPartyOwnerOrOwnerOrReadOnly,)
+    serializer_class = SongCategorySerializer

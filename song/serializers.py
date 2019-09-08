@@ -3,12 +3,32 @@ import re
 import requests
 from requests import Response
 from rest_framework import serializers
+from rest_framework.relations import PrimaryKeyRelatedField
+from rest_framework.validators import UniqueTogetherValidator
 
 from account.serializers import UserSerializer, UserMinimalSerializer
 from mrp.utils import Regex
-from party.models import Party, PartyCategory
-from party.serializers import PartySerializer, PartyCategoryMinimalSerializer
-from song.models import Song, SongPlayer
+from party.models import Party
+from party.serializers import PartySerializer
+from song.models import Song, SongPlayer, SongCategory
+
+
+class SongCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SongCategory
+        fields = (
+            'id',
+            'song',
+            'category',
+            'date',
+        )
+        validators = [
+            UniqueTogetherValidator(
+                message='Song already part of this category.',
+                fields=('song', 'category'),
+                queryset=SongCategory.objects.all(),
+            )
+        ]
 
 
 class SongSerializer(serializers.ModelSerializer):
@@ -22,7 +42,7 @@ class SongSerializer(serializers.ModelSerializer):
 
 class SongMinimalSerializer(serializers.ModelSerializer):
     user = UserMinimalSerializer()
-    category = PartyCategoryMinimalSerializer()
+    categories = PrimaryKeyRelatedField(many=True, source='song_category', queryset=SongCategory.objects.all())
 
     class Meta:
         model = Song
@@ -32,26 +52,8 @@ class SongMinimalSerializer(serializers.ModelSerializer):
             'player',
             'source',
             'name',
-            'category',
+            'categories',
         )
-
-
-class SongUpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Song
-        fields = (
-            'name',
-            'category',
-        )
-
-    def update(self, instance, validated_data):
-        category: PartyCategory = validated_data['category']
-
-        # Category must be from this party
-        if category and category.party != instance.party:
-            raise serializers.ValidationError({'category': 'Invalid category.'})
-
-        return super().update(instance, validated_data)
 
 
 class SongCreateSerializer(serializers.ModelSerializer):
