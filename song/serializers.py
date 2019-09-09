@@ -56,7 +56,7 @@ class SongMinimalSerializer(serializers.ModelSerializer):
         )
 
 
-class SongCreateSerializer(serializers.ModelSerializer):
+class SongWriteSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     party = serializers.PrimaryKeyRelatedField(queryset=Party.objects.all())
 

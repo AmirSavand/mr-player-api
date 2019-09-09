@@ -23,6 +23,17 @@ class AccountSerializer(serializers.ModelSerializer):
         }
 
 
+class AccountMinimalSerializer(serializers.ModelSerializer):
+    name = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Account
+        fields = (
+            'color',
+            'name',
+        )
+
+
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
     account = AccountSerializer(read_only=True)
@@ -53,9 +64,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserMinimalSerializer(serializers.ModelSerializer):
+    account = AccountMinimalSerializer()
+
     class Meta:
         model = User
         fields = (
             'id',
             'username',
+            'account'
         )
