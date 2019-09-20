@@ -3,17 +3,40 @@ import re
 import requests
 from requests import Response
 from rest_framework import serializers
-from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.validators import UniqueTogetherValidator
 
 from account.serializers import UserSerializer, UserMinimalSerializer
 from mrp.utils import Regex
 from party.models import Party
-from party.serializers import PartySerializer
+from party.serializers import PartySerializer, PartyCategoryMinimalSerializer
 from song.models import Song, SongPlayer, SongCategory
 
 
 class SongCategorySerializer(serializers.ModelSerializer):
+    category = PartyCategoryMinimalSerializer()
+
+    class Meta:
+        model = SongCategory
+        fields = (
+            'id',
+            'song',
+            'category',
+            'date',
+        )
+
+
+class SongCategoryMinimalSerializer(serializers.ModelSerializer):
+    category = PartyCategoryMinimalSerializer()
+
+    class Meta:
+        model = SongCategory
+        fields = (
+            'id',
+            'category',
+        )
+
+
+class SongCategoryWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = SongCategory
         fields = (
@@ -42,7 +65,7 @@ class SongSerializer(serializers.ModelSerializer):
 
 class SongMinimalSerializer(serializers.ModelSerializer):
     user = UserMinimalSerializer()
-    categories = PrimaryKeyRelatedField(many=True, source='song_category', queryset=SongCategory.objects.all())
+    categories = SongCategoryMinimalSerializer(many=True, source='song_category')
 
     class Meta:
         model = Song
