@@ -1,5 +1,6 @@
 from django.db.models import QuerySet, Q
 from rest_framework import viewsets
+from rest_framework.filters import SearchFilter
 
 from mrp.utils import IsAuthAndPartyOwnerOrOwnerOrReadOnly, IsAuthAndOwnerOrReadOnly
 from party.models import Party, PartyUser, PartyCategory, PartyStatus
@@ -16,6 +17,14 @@ class PartyViewSet(viewsets.ModelViewSet):
     queryset = Party.objects.all()
     permission_classes = (IsAuthAndOwnerOrReadOnly,)
     filter_fields = ('status', 'user',)
+    order_fields = ('date',)
+    search_fields = (
+        'title',
+        'description',
+        'party_category__name',
+        'user__username',
+        'user__account__display_name',
+    )
 
     def get_queryset(self):
         queryset: QuerySet = self.queryset
