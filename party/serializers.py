@@ -13,6 +13,7 @@ class PartyCategorySerializer(serializers.ModelSerializer):
             'id',
             'party',
             'name',
+            'image',
         )
         validators = [
             UniqueTogetherValidator(

@@ -56,6 +56,7 @@ class PartyUser(models.Model):
 
 class PartyCategory(models.Model):
     party = models.ForeignKey(Party, related_name='party_category', on_delete=models.CASCADE)
+    image = models.URLField(max_length=100, blank=True, null=True)
     name = models.CharField(max_length=50)
 
     def __str__(self):
