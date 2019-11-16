@@ -1,6 +1,5 @@
 from django.db.models import QuerySet, Q
 from rest_framework import viewsets
-from rest_framework.filters import SearchFilter
 
 from mrp.utils import IsAuthAndPartyOwnerOrOwnerOrReadOnly, IsAuthAndOwnerOrReadOnly
 from party.models import Party, PartyUser, PartyCategory, PartyStatus

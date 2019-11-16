@@ -30,6 +30,7 @@ class PartyCategoryMinimalSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'name',
+            'image',
         )
 
 
