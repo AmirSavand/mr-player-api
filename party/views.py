@@ -1,7 +1,7 @@
 from django.db.models import QuerySet, Q
 from rest_framework import viewsets
 
-from mrp.utils import IsAuthAndPartyOwnerOrOwnerOrReadOnly, IsAuthAndOwnerOrReadOnly
+from playzem.utils import IsAuthAndPartyOwnerOrOwnerOrReadOnly, IsAuthAndOwnerOrReadOnly
 from party.models import Party, PartyUser, PartyCategory, PartyStatus
 from party.serializers import (
     PartySerializer,
