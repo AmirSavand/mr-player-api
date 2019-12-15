@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from account.models import Account
-from mrp.utils import Regex
+from playzem.utils import Regex
 
 
 class AccountSerializer(serializers.ModelSerializer):

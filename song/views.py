@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 
-from mrp.utils import LargePagination, IsAuthAndPartyOwnerOrOwnerOrReadOnly
+from playzem.utils import LargePagination, IsAuthAndPartyOwnerOrOwnerOrReadOnly
 from song.models import Song, SongCategory
 from song.serializers import (
     SongSerializer,
