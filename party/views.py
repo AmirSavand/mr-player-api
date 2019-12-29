@@ -2,7 +2,7 @@ from django.db.models import QuerySet, Q
 from rest_framework import viewsets
 
 from playzem.utils import IsAuthAndPartyOwnerOrOwnerOrReadOnly, IsAuthAndOwnerOrReadOnly
-from party.models import Party, PartyUser, PartyCategory, PartyStatus
+from party.models import Party, PartyUser, PartyCategory
 from party.serializers import (
     PartySerializer,
     PartyUserSerializer,
@@ -29,14 +29,14 @@ class PartyViewSet(viewsets.ModelViewSet):
         queryset: QuerySet = self.queryset
         if self.action is 'list':
             if self.request.user.is_authenticated:
-                queryset = queryset.filter(Q(user=self.request.user) | Q(status=PartyStatus.PUBLIC))
+                queryset = queryset.filter(Q(user=self.request.user) | Q(status=Party.Status.PUBLIC))
             else:
-                queryset = queryset.filter(status=PartyStatus.PUBLIC)
+                queryset = queryset.filter(status=Party.Status.PUBLIC)
         elif self.action is 'retrieve':
             if self.request.user.is_authenticated:
-                queryset = queryset.filter(Q(user=self.request.user) | ~Q(status=PartyStatus.CLOSE))
+                queryset = queryset.filter(Q(user=self.request.user) | ~Q(status=Party.Status.CLOSE))
             else:
-                queryset = queryset.exclude(status=PartyStatus.CLOSE)
+                queryset = queryset.exclude(status=Party.Status.CLOSE)
         return queryset
 
     def get_serializer_class(self):
