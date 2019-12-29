@@ -9,7 +9,7 @@ from account.serializers import UserSerializer, UserMinimalSerializer
 from playzem.utils import Regex
 from party.models import Party
 from party.serializers import PartySerializer, PartyCategoryMinimalSerializer
-from song.models import Song, SongPlayer, SongCategory
+from song.models import Song, SongCategory
 
 
 class SongCategorySerializer(serializers.ModelSerializer):
@@ -98,11 +98,11 @@ class SongWriteSerializer(serializers.ModelSerializer):
 
         # Check source for youtube player
         if re.match(Regex.YOUTUBE, data['source']):
-            data['player'] = SongPlayer.YOUTUBE
+            data['player'] = Song.Player.YOUTUBE
 
         # Check source for soundcloud player
         elif re.match(Regex.SOUNDCLOUD, data['source']):
-            data['player'] = SongPlayer.SOUNDCLOUD
+            data['player'] = Song.Player.SOUNDCLOUD
 
         # Source didn't match any player
         else:
@@ -110,7 +110,7 @@ class SongWriteSerializer(serializers.ModelSerializer):
 
         # Get song name if not set
         if not data.get('name'):
-            if data['player'] == SongPlayer.YOUTUBE:
+            if data['player'] == Song.Player.YOUTUBE:
                 response: Response = requests.get('https://youtube.com/oembed', {
                     'url': data['source'],
                     'format': 'json',
