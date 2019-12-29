@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from account.models import Account
+from like.models import Like
 from playzem.utils import Regex
 
 
@@ -19,7 +20,7 @@ class AccountSerializer(serializers.ModelSerializer):
             'name',
         )
         extra_kwargs = {
-            'display_name': {'write_only': True}
+            'display_name': {'write_only': True},
         }
 
 
@@ -37,6 +38,7 @@ class AccountMinimalSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
     account = AccountSerializer(read_only=True)
+    likes = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
@@ -46,6 +48,7 @@ class UserSerializer(serializers.ModelSerializer):
             'email',
             'date_joined',
             'last_login',
+            'likes',
             'account',
             'password',
         )
@@ -54,6 +57,9 @@ class UserSerializer(serializers.ModelSerializer):
             'last_login': {'read_only': True},
             'password': {'write_only': True},
         }
+
+    def get_likes(self, obj):
+        return Like.objects.filter(kind=Like.Kind.USER, like=obj.username).count()
 
     def create(self, validated_data: dict):
         return User.objects.create_user(
@@ -71,5 +77,5 @@ class UserMinimalSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'username',
-            'account'
+            'account',
         )

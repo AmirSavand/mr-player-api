@@ -2,11 +2,14 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from account.serializers import UserSerializer
+from like.models import Like
 from playzem.utils import Regex
 from party.models import Party, PartyUser, PartyCategory
 
 
 class PartyCategorySerializer(serializers.ModelSerializer):
+    likes = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = PartyCategory
         fields = (
@@ -14,6 +17,7 @@ class PartyCategorySerializer(serializers.ModelSerializer):
             'party',
             'name',
             'image',
+            'likes',
         )
         validators = [
             UniqueTogetherValidator(
@@ -23,14 +27,18 @@ class PartyCategorySerializer(serializers.ModelSerializer):
             )
         ]
 
+    def get_likes(self, obj):
+        return Like.objects.filter(kind=Like.Kind.CATEGORY, like=obj.pk).count()
 
-class PartyCategoryMinimalSerializer(serializers.ModelSerializer):
+
+class PartyCategoryMinimalSerializer(PartyCategorySerializer):
     class Meta:
         model = PartyCategory
         fields = (
             'id',
             'name',
             'image',
+            'likes',
         )
 
 
@@ -40,6 +48,7 @@ class PartySerializer(serializers.ModelSerializer):
     image = serializers.RegexField(Regex.IMGUR, allow_blank=True, allow_null=True)
     cover = serializers.RegexField(Regex.IMGUR, allow_blank=True, allow_null=True)
     categories = PartyCategoryMinimalSerializer(many=True, source='party_category')
+    likes = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Party
@@ -52,8 +61,12 @@ class PartySerializer(serializers.ModelSerializer):
             'image',
             'cover',
             'date',
+            'likes',
             'categories',
         )
+
+    def get_likes(self, obj):
+        return Like.objects.filter(kind=Like.Kind.PARTY, like=obj.pk).count()
 
 
 class PartyCreateSerializer(serializers.ModelSerializer):

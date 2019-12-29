@@ -6,9 +6,10 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from account.serializers import UserSerializer, UserMinimalSerializer
-from playzem.utils import Regex
+from like.models import Like
 from party.models import Party
 from party.serializers import PartySerializer, PartyCategoryMinimalSerializer
+from playzem.utils import Regex
 from song.models import Song, SongCategory
 
 
@@ -57,13 +58,26 @@ class SongCategoryWriteSerializer(serializers.ModelSerializer):
 class SongSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True, default=serializers.CurrentUserDefault())
     party = PartySerializer(read_only=True)
+    likes = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Song
-        fields = '__all__'
+        fields = (
+            'id',
+            'user',
+            'party',
+            'player',
+            'source',
+            'name',
+            'date',
+            'likes',
+        )
+
+    def get_likes(self, obj):
+        return Like.objects.filter(kind=Like.Kind.SONG, like=obj.pk).count()
 
 
-class SongMinimalSerializer(serializers.ModelSerializer):
+class SongMinimalSerializer(SongSerializer):
     user = UserMinimalSerializer()
     categories = SongCategoryMinimalSerializer(many=True, source='song_category')
 
@@ -76,6 +90,7 @@ class SongMinimalSerializer(serializers.ModelSerializer):
             'source',
             'name',
             'categories',
+            'likes',
         )
 
 
