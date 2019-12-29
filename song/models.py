@@ -9,8 +9,8 @@ class Song(models.Model):
         YOUTUBE = 1
         SOUNDCLOUD = 2
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    party = models.ForeignKey(Party, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, db_index=True, on_delete=models.CASCADE)
+    party = models.ForeignKey(Party, db_index=True, on_delete=models.CASCADE)
     player = models.IntegerField(choices=Player.choices, default=Player.YOUTUBE)
     source = models.URLField()
     name = models.CharField(max_length=200, null=True, blank=True)
@@ -24,8 +24,12 @@ class Song(models.Model):
 
 
 class SongCategory(models.Model):
-    song = models.ForeignKey(Song, related_name='song_category', on_delete=models.CASCADE)
-    category = models.ForeignKey(PartyCategory, related_name='song_category', on_delete=models.CASCADE)
+    song = models.ForeignKey(
+        Song, related_name='song_category', db_index=True, on_delete=models.CASCADE
+    )
+    category = models.ForeignKey(
+        PartyCategory, related_name='song_category', db_index=True, on_delete=models.CASCADE
+    )
     date = models.DateTimeField(auto_now_add=True)
 
     @property

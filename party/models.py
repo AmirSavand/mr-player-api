@@ -11,10 +11,10 @@ class Party(models.Model):
         PUBLIC = 3
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, db_index=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=50, null=True, blank=True)
     description = models.TextField(max_length=2000, null=True, blank=True)
-    status = models.IntegerField(choices=Status.choices, default=Status.PUBLIC)
+    status = models.IntegerField(choices=Status.choices, default=Status.PUBLIC, db_index=True)
     image = models.URLField(max_length=100, blank=True, null=True)
     cover = models.URLField(max_length=100, blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)

@@ -10,4 +10,4 @@ class LikeViewSet(CreateModelMixin, DestroyModelMixin, ListModelMixin, GenericVi
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
     permission_classes = (IsAuthAndOwnerOrReadOnly,)
-    filterset_fields = ('user', 'kind', 'like',)
+    filter_fields = ('user', 'kind', 'like',)
