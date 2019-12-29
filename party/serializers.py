@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from account.serializers import UserSerializer
-from mrp.utils import Regex
+from playzem.utils import Regex
 from party.models import Party, PartyUser, PartyCategory
 
 
@@ -13,6 +13,7 @@ class PartyCategorySerializer(serializers.ModelSerializer):
             'id',
             'party',
             'name',
+            'image',
         )
         validators = [
             UniqueTogetherValidator(
@@ -29,6 +30,7 @@ class PartyCategoryMinimalSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'name',
+            'image',
         )
 
 

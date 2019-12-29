@@ -5,19 +5,19 @@ from rest_framework.documentation import include_docs_urls
 from rest_framework_jwt.views import obtain_jwt_token
 
 from account.views import UserViewSet, AccountViewSet
-from mrp.settings import ADMIN_URL
 from party.views import PartyViewSet, PartyUserViewSet, PartyCategoryViewSet
+from playzem.settings import ADMIN_URL
 from song.views import SongViewSet, SongCategoryViewSet
 
 router = routers.DefaultRouter()
 
-router.register('users', UserViewSet, basename='User')
-router.register('accounts', AccountViewSet, basename='Account')
-router.register('parties', PartyViewSet, basename='Party')
-router.register('party-users', PartyUserViewSet, basename='Party Users')
-router.register('party-categories', PartyCategoryViewSet, basename='Party Categories')
-router.register('songs', SongViewSet, basename='Song')
-router.register('song-categories', SongCategoryViewSet, basename='Song Categories')
+router.register('user', UserViewSet, basename='User')
+router.register('account', AccountViewSet, basename='Account')
+router.register('party', PartyViewSet, basename='Party')
+router.register('party-user', PartyUserViewSet, basename='Party User')
+router.register('party-category', PartyCategoryViewSet, basename='Party Category')
+router.register('song', SongViewSet, basename='Song')
+router.register('song-category', SongCategoryViewSet, basename='Song Category')
 
 urlpatterns = router.urls
 urlpatterns += (

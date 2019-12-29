@@ -6,7 +6,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from account.serializers import UserSerializer, UserMinimalSerializer
-from mrp.utils import Regex
+from playzem.utils import Regex
 from party.models import Party
 from party.serializers import PartySerializer, PartyCategoryMinimalSerializer
 from song.models import Song, SongPlayer, SongCategory
