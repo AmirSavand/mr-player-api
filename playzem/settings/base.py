@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'account',
     'party',
     'song',
+    'like',
 ]
 
 MIDDLEWARE = [
