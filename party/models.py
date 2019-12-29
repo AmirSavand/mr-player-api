@@ -4,24 +4,17 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
-class PartyStatus:
-    CLOSE = 0
-    PRIVATE = 1
-    PUBLIC = 2
-
-
 class Party(models.Model):
-    PARTY_STATUS_CHOICES = (
-        (PartyStatus.CLOSE, 'Close'),
-        (PartyStatus.PRIVATE, 'Private'),
-        (PartyStatus.PUBLIC, 'Public'),
-    )
+    class Status(models.IntegerChoices):
+        CLOSE = 1
+        PRIVATE = 2
+        PUBLIC = 3
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50, null=True, blank=True)
     description = models.TextField(max_length=2000, null=True, blank=True)
-    status = models.IntegerField(choices=PARTY_STATUS_CHOICES, default=PartyStatus.PUBLIC)
+    status = models.IntegerField(choices=Status.choices, default=Status.PUBLIC)
     image = models.URLField(max_length=100, blank=True, null=True)
     cover = models.URLField(max_length=100, blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)
