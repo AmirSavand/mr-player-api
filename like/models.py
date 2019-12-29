@@ -37,3 +37,4 @@ class Like(models.Model):
 
     class Meta:
         ordering = ('id',)
+        unique_together = (('user', 'kind', 'like'),)
