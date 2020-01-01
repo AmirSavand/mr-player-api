@@ -5,6 +5,8 @@ from rest_framework import permissions
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import BasePermission
 
+from like.models import Like
+
 
 def validate_uuid4(uuid_string):
     try:
@@ -14,6 +16,16 @@ def validate_uuid4(uuid_string):
     except TypeError:
         return False
     return True
+
+
+def get_serializer_like(serializer, obj, kind: Like.Kind) -> int:
+    user = serializer.context['request'].user
+    if user.is_authenticated:
+        like = Like.objects.filter(kind=kind, like=obj.pk, user=user.id)
+        if like.exists():
+            return like[0].id
+        return 0
+    return 0
 
 
 class StandardPagination(PageNumberPagination):

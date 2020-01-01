@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 from account.models import Account
 from like.models import Like
-from playzem.utils import Regex
+from playzem.utils import Regex, get_serializer_like
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -39,6 +39,7 @@ class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
     account = AccountSerializer(read_only=True)
     likes = serializers.SerializerMethodField(read_only=True)
+    like = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
@@ -49,6 +50,7 @@ class UserSerializer(serializers.ModelSerializer):
             'date_joined',
             'last_login',
             'likes',
+            'like',
             'account',
             'password',
         )
@@ -60,6 +62,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_likes(self, obj):
         return Like.objects.filter(kind=Like.Kind.USER, like=obj.username).count()
+
+    def get_like(self, obj) -> int:
+        return get_serializer_like(self, obj, Like.Kind.USER)
 
     def create(self, validated_data: dict):
         return User.objects.create_user(
