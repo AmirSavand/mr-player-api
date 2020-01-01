@@ -1,16 +1,15 @@
-from django.contrib.auth.models import User
-from django.db.models import QuerySet
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from account.serializers import UserSerializer
 from like.models import Like
 from party.models import Party, PartyUser, PartyCategory
-from playzem.utils import Regex
+from playzem.utils import Regex, get_serializer_like
 
 
 class PartyCategorySerializer(serializers.ModelSerializer):
     likes = serializers.SerializerMethodField(read_only=True)
+    like = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = PartyCategory
@@ -20,6 +19,7 @@ class PartyCategorySerializer(serializers.ModelSerializer):
             'name',
             'image',
             'likes',
+            'like',
         )
         validators = [
             UniqueTogetherValidator(
@@ -32,6 +32,9 @@ class PartyCategorySerializer(serializers.ModelSerializer):
     def get_likes(self, obj) -> int:
         return Like.objects.filter(kind=Like.Kind.CATEGORY, like=obj.pk).count()
 
+    def get_like(self, obj) -> int:
+        return get_serializer_like(self, obj, Like.Kind.CATEGORY)
+
 
 class PartyCategoryMinimalSerializer(PartyCategorySerializer):
     class Meta:
@@ -41,6 +44,7 @@ class PartyCategoryMinimalSerializer(PartyCategorySerializer):
             'name',
             'image',
             'likes',
+            'like',
         )
 
 
@@ -73,13 +77,7 @@ class PartySerializer(serializers.ModelSerializer):
         return Like.objects.filter(kind=Like.Kind.PARTY, like=obj.pk).count()
 
     def get_like(self, obj) -> int:
-        user = self.context['request'].user
-        if user.is_authenticated:
-            like = Like.objects.filter(kind=Like.Kind.PARTY, like=obj.pk, user=user.id)
-            if like.exists():
-                return like[0].id
-            return 0
-        return 0
+        return get_serializer_like(self, obj, Like.Kind.PARTY)
 
 
 class PartyCreateSerializer(serializers.ModelSerializer):

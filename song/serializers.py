@@ -9,7 +9,7 @@ from account.serializers import UserSerializer, UserMinimalSerializer
 from like.models import Like
 from party.models import Party
 from party.serializers import PartySerializer, PartyCategoryMinimalSerializer
-from playzem.utils import Regex
+from playzem.utils import Regex, get_serializer_like
 from song.models import Song, SongCategory
 
 
@@ -59,6 +59,7 @@ class SongSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True, default=serializers.CurrentUserDefault())
     party = PartySerializer(read_only=True)
     likes = serializers.SerializerMethodField(read_only=True)
+    like = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Song
@@ -71,10 +72,14 @@ class SongSerializer(serializers.ModelSerializer):
             'name',
             'date',
             'likes',
+            'like',
         )
 
     def get_likes(self, obj):
         return Like.objects.filter(kind=Like.Kind.SONG, like=obj.pk).count()
+
+    def get_like(self, obj) -> int:
+        return get_serializer_like(self, obj, Like.Kind.SONG)
 
 
 class SongMinimalSerializer(SongSerializer):
@@ -91,6 +96,7 @@ class SongMinimalSerializer(SongSerializer):
             'name',
             'categories',
             'likes',
+            'like',
         )
 
 
