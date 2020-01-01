@@ -1,10 +1,12 @@
+from django.contrib.auth.models import User
+from django.db.models import QuerySet
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from account.serializers import UserSerializer
 from like.models import Like
-from playzem.utils import Regex
 from party.models import Party, PartyUser, PartyCategory
+from playzem.utils import Regex
 
 
 class PartyCategorySerializer(serializers.ModelSerializer):
@@ -27,7 +29,7 @@ class PartyCategorySerializer(serializers.ModelSerializer):
             )
         ]
 
-    def get_likes(self, obj):
+    def get_likes(self, obj) -> int:
         return Like.objects.filter(kind=Like.Kind.CATEGORY, like=obj.pk).count()
 
 
@@ -49,6 +51,7 @@ class PartySerializer(serializers.ModelSerializer):
     cover = serializers.RegexField(Regex.IMGUR, allow_blank=True, allow_null=True)
     categories = PartyCategoryMinimalSerializer(many=True, source='party_category')
     likes = serializers.SerializerMethodField(read_only=True)
+    like = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Party
@@ -62,11 +65,21 @@ class PartySerializer(serializers.ModelSerializer):
             'cover',
             'date',
             'likes',
+            'like',
             'categories',
         )
 
     def get_likes(self, obj):
         return Like.objects.filter(kind=Like.Kind.PARTY, like=obj.pk).count()
+
+    def get_like(self, obj) -> int:
+        user = self.context['request'].user
+        if user.is_authenticated:
+            like = Like.objects.filter(kind=Like.Kind.PARTY, like=obj.pk, user=user.id)
+            if like.exists():
+                return like[0].id
+            return 0
+        return 0
 
 
 class PartyCreateSerializer(serializers.ModelSerializer):
