@@ -42,3 +42,5 @@ celerybeat-schedule
 docs/
 # Generated static files
 staticfiles/
+# Generated email files
+sent-emails/
