@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from django.contrib.auth.models import User
+from rest_auth.serializers import PasswordResetSerializer
 from rest_framework import permissions
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import BasePermission
@@ -95,6 +96,13 @@ class IsAuthAndOwner(BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return request.user == obj.user
+
+
+class CustomPasswordResetSerializer(PasswordResetSerializer):
+    def get_email_options(self):
+        return {
+            'email_template_name': 'templates/email-password-reset.txt'
+        }
 
 
 class Regex:

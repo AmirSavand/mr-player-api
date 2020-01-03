@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
+from rest_auth.views import PasswordResetView, PasswordResetConfirmView, PasswordChangeView
 from rest_framework import routers
 from rest_framework.documentation import include_docs_urls
 from rest_framework_jwt.views import obtain_jwt_token
@@ -27,4 +28,7 @@ urlpatterns += (
     path('docs/', include_docs_urls(title='PlayzEM API')),
     path('auth/', include('rest_framework.urls')),
     path('auth/', obtain_jwt_token),
+    path('auth/password/change/', PasswordChangeView.as_view(), name='rest_password_change'),
+    path('auth/password/reset/', PasswordResetView.as_view(), name='rest_password_reset'),
+    path('auth/password/reset/confirm/', PasswordResetConfirmView.as_view(), name='rest_password_reset_confirm'),
 )

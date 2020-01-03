@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
+    'rest_auth',
     'django_filters',
     'account',
     'party',
@@ -48,7 +49,9 @@ ROOT_URLCONF = 'playzem.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, '..'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -138,6 +141,12 @@ JWT_AUTH = {
     'JWT_VERIFY_EXPIRATION': False,
 }
 
+# Reset auth
+
+REST_AUTH_SERIALIZERS = {
+    'PASSWORD_RESET_SERIALIZER': 'playzem.utils.CustomPasswordResetSerializer',
+}
+
 # CORS
 
 # CORS_ORIGIN_WHITELIST = []
@@ -149,3 +158,4 @@ DEBUG = os.environ.get('DJANGO_DEBUG') != 'False'
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'something')
 ADMIN_URL = os.environ.get('DJANGO_ADMIN_URL', 'admin/')
 ALLOWED_HOSTS = [os.environ.get('DJANGO_ALLOWED_HOST', 'localhost')]
+DEFAULT_FROM_EMAIL = os.environ.get('DJANGO_DEFAULT_FROM_EMAIL', 'info@playzem.savandbros.com')
