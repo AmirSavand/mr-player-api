@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from rest_framework_jwt.serializers import User
 
 from party.models import Party, PartyCategory
@@ -43,3 +45,8 @@ class SongCategory(models.Model):
         verbose_name_plural = 'Song categories'
         ordering = ('id',)
         unique_together = (('song', 'category'),)
+
+
+# @receiver(post_save, sender=User)
+# def create_user_account(sender, instance, created, **kwargs):
+#     push
