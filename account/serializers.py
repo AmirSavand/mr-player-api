@@ -64,7 +64,7 @@ class UserSerializer(serializers.ModelSerializer):
         return Like.objects.filter(kind=Like.Kind.USER, like=obj.username).count()
 
     def get_like(self, obj) -> int:
-        return get_serializer_like(self, obj, Like.Kind.USER)
+        return get_serializer_like(self, obj, Like.Kind.USER, obj.username)
 
     def create(self, validated_data: dict):
         return User.objects.create_user(
