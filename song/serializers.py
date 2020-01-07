@@ -1,17 +1,14 @@
-import json
 import re
 
 import requests
 from requests import Response
 from rest_framework import serializers
-from rest_framework.renderers import JSONRenderer
 from rest_framework.validators import UniqueTogetherValidator
 
 from account.serializers import UserSerializer, UserMinimalSerializer
 from like.models import Like
 from party.models import Party
 from party.serializers import PartySerializer, PartyCategoryMinimalSerializer
-from playzem.pusher import pusher_client
 from playzem.utils import Regex, get_serializer_like
 from song.models import Song, SongCategory
 
@@ -103,12 +100,6 @@ class SongMinimalSerializer(SongSerializer):
         )
 
 
-class Checking(serializers.ModelSerializer):
-    class Meta:
-        model = Song
-        fields = '__all__'
-
-
 class SongWriteSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     party = serializers.PrimaryKeyRelatedField(queryset=Party.objects.all())
@@ -147,13 +138,4 @@ class SongWriteSerializer(serializers.ModelSerializer):
                 })
                 data['name'] = response.json()['title']
 
-        # Create the object
-        song = super().create(validated_data)
-
-        # Trigger pusher event
-        pusher_client.trigger(
-            channels='party-{pk}'.format(pk=data['party'].pk),
-            event_name='new-song',
-            data=song.pk,
-        )
-        return song
+        return super().create(validated_data)
