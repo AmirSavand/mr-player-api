@@ -1,4 +1,5 @@
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.mixins import ListModelMixin, DestroyModelMixin, CreateModelMixin
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
 from playzem.utils import LargePagination, IsAuthAndPartyOwnerOrOwnerOrReadOnly
 from song.models import Song, SongCategory
@@ -25,7 +26,7 @@ class SongViewSet(ModelViewSet):
         return SongSerializer
 
 
-class SongCategoryViewSet(ModelViewSet):
+class SongCategoryViewSet(CreateModelMixin, DestroyModelMixin, ListModelMixin, GenericViewSet):
     queryset = SongCategory.objects.all()
     permission_classes = (IsAuthAndPartyOwnerOrOwnerOrReadOnly,)
     serializer_class = SongCategorySerializer

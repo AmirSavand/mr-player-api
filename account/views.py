@@ -1,4 +1,6 @@
 from django.contrib.auth.models import User
+from django.db.models import Q
+from rest_framework.generics import get_object_or_404
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.viewsets import GenericViewSet
 
@@ -8,18 +10,21 @@ from playzem.utils import IsAuthAndOwnerOrReadOnly
 
 
 class UserViewSet(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
-    """
-    Get user detail and sign up.
-    """
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = 'username'
 
+    def get_object(self):
+        queryset = self.get_queryset()
+        queryset = self.filter_queryset(queryset)
+        obj = get_object_or_404(queryset.filter(
+            Q(username=self.kwargs['username']) | Q(pk=self.request.query_params.get('pk'))
+        ))
+        self.check_object_permissions(self.request, obj)
+        return obj
+
 
 class AccountViewSet(UpdateModelMixin, GenericViewSet):
-    """
-    Update user account.
-    """
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
     permission_classes = (IsAuthAndOwnerOrReadOnly,)

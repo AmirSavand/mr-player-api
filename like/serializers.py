@@ -1,4 +1,7 @@
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+from rest_framework.fields import CurrentUserDefault
 
 from like.models import Like
 
@@ -16,6 +19,14 @@ class LikeSerializer(serializers.ModelSerializer):
             'date',
         )
 
-    def create(self, validated_data):
-        validated_data['user'] = self.context['request'].user
-        return super().create(validated_data)
+
+class LikeCreateSerializer(LikeSerializer):
+    user = serializers.HiddenField(default=CurrentUserDefault())
+
+    def validate(self, data):
+        model = Like.get_like_model(data['kind'])
+        try:
+            model.objects.get(pk=data['like'])
+        except (ValueError, ObjectDoesNotExist):
+            raise ValidationError('You can not like what does not exist.')
+        return super().validate(data)

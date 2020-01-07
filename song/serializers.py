@@ -112,7 +112,7 @@ class SongWriteSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        data: dict = validated_data
+        data = validated_data
 
         # Set user to authenticated user
         data['user'] = self.context['request'].user
@@ -138,4 +138,4 @@ class SongWriteSerializer(serializers.ModelSerializer):
                 })
                 data['name'] = response.json()['title']
 
-        return super().create(data)
+        return super().create(validated_data)

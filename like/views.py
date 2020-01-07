@@ -2,12 +2,16 @@ from rest_framework.mixins import CreateModelMixin, DestroyModelMixin, ListModel
 from rest_framework.viewsets import GenericViewSet
 
 from like.models import Like
-from like.serializers import LikeSerializer
+from like.serializers import LikeSerializer, LikeCreateSerializer
 from playzem.utils import IsAuthAndOwnerOrReadOnly
 
 
 class LikeViewSet(CreateModelMixin, DestroyModelMixin, ListModelMixin, GenericViewSet):
     queryset = Like.objects.all()
-    serializer_class = LikeSerializer
     permission_classes = (IsAuthAndOwnerOrReadOnly,)
     filter_fields = ('user', 'kind', 'like',)
+
+    def get_serializer_class(self):
+        if self.action in ['create']:
+            return LikeCreateSerializer
+        return LikeSerializer
