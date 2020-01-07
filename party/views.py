@@ -1,7 +1,7 @@
 from django.db.models import QuerySet, Q
-from rest_framework import viewsets
+from rest_framework.mixins import ListModelMixin, DestroyModelMixin, CreateModelMixin
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
-from playzem.utils import IsAuthAndPartyOwnerOrOwnerOrReadOnly, IsAuthAndOwnerOrReadOnly
 from party.models import Party, PartyUser, PartyCategory
 from party.serializers import (
     PartySerializer,
@@ -10,9 +10,10 @@ from party.serializers import (
     PartyCreateSerializer,
     PartyCategorySerializer,
 )
+from playzem.utils import IsAuthAndPartyOwnerOrOwnerOrReadOnly, IsAuthAndOwnerOrReadOnly
 
 
-class PartyViewSet(viewsets.ModelViewSet):
+class PartyViewSet(ModelViewSet):
     queryset = Party.objects.all()
     permission_classes = (IsAuthAndOwnerOrReadOnly,)
     filter_fields = ('status', 'user',)
@@ -45,7 +46,7 @@ class PartyViewSet(viewsets.ModelViewSet):
         return PartySerializer
 
 
-class PartyUserViewSet(viewsets.ModelViewSet):
+class PartyUserViewSet(CreateModelMixin, DestroyModelMixin, ListModelMixin, GenericViewSet):
     queryset = PartyUser.objects.all()
     permission_classes = (IsAuthAndPartyOwnerOrOwnerOrReadOnly,)
     filter_fields = ('party', 'user',)
@@ -56,7 +57,7 @@ class PartyUserViewSet(viewsets.ModelViewSet):
         return PartyUserSerializer
 
 
-class PartyCategoryViewSet(viewsets.ModelViewSet):
+class PartyCategoryViewSet(CreateModelMixin, DestroyModelMixin, ListModelMixin, GenericViewSet):
     queryset = PartyCategory.objects.all()
     permission_classes = (IsAuthAndPartyOwnerOrOwnerOrReadOnly,)
     serializer_class = PartyCategorySerializer

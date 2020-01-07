@@ -2,6 +2,11 @@ import uuid
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+
+from party.pusher import get_channel_name
+from playzem.pusher import model_trigger
 
 
 class Party(models.Model):
@@ -59,3 +64,20 @@ class PartyCategory(models.Model):
         verbose_name_plural = 'Party categories'
         ordering = ('id',)
         unique_together = (('party', 'name'),)
+
+
+@receiver([post_save, post_delete], sender=Party)
+def trigger_pusher_party(sender, instance, created=None, **kwargs):
+    # No one subscribes to a party that has not been created yet
+    if not created:
+        model_trigger(instance, created, get_channel_name(instance.pk))
+
+
+@receiver([post_save, post_delete], sender=PartyUser)
+def trigger_pusher_party_user(sender, instance, created=None, **kwargs):
+    model_trigger(instance, created)
+
+
+@receiver([post_save, post_delete], sender=PartyCategory)
+def trigger_pusher_party_category(sender, instance, created=None, **kwargs):
+    model_trigger(instance, created)

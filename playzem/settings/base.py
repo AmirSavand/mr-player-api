@@ -159,3 +159,9 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'something')
 ADMIN_URL = os.environ.get('DJANGO_ADMIN_URL', 'admin/')
 ALLOWED_HOSTS = [os.environ.get('DJANGO_ALLOWED_HOST', 'localhost')]
 DEFAULT_FROM_EMAIL = os.environ.get('DJANGO_DEFAULT_FROM_EMAIL', 'info@playzem.savandbros.com')
+
+PUSHER_APP_ID = os.environ.get('DJANGO_PUSHER_APP_ID')
+PUSHER_KEY = os.environ.get('DJANGO_PUSHER_KEY')
+PUSHER_SECRET = os.environ.get('DJANGO_PUSHER_SECRET')
+PUSHER_CLUSTER = os.environ.get('DJANGO_PUSHER_CLUSTER')
+PUSHER_SSL = os.environ.get('DJANGO_PUSHER_SSL') == 'True'

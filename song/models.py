@@ -1,7 +1,10 @@
+from django.contrib.auth.models import User
 from django.db import models
-from rest_framework_jwt.serializers import User
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 
 from party.models import Party, PartyCategory
+from playzem.pusher import model_trigger
 
 
 class Song(models.Model):
@@ -43,3 +46,13 @@ class SongCategory(models.Model):
         verbose_name_plural = 'Song categories'
         ordering = ('id',)
         unique_together = (('song', 'category'),)
+
+
+@receiver([post_save, post_delete], sender=Song)
+def trigger_pusher_song(sender, instance, created=None, **kwargs):
+    model_trigger(instance, created)
+
+
+@receiver([post_save, post_delete], sender=SongCategory)
+def trigger_pusher_song_category(sender, instance, created=None, **kwargs):
+    model_trigger(instance, created)
