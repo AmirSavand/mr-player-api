@@ -19,10 +19,10 @@ def validate_uuid4(uuid_string):
     return True
 
 
-def get_serializer_like(serializer, obj, kind: Like.Kind, lookup=None) -> int:
+def get_serializer_like(serializer, obj, kind: Like.Kind) -> int:
     user = serializer.context['request'].user
     if user.is_authenticated:
-        like = Like.objects.filter(kind=kind, like=lookup or obj.pk, user=user.id)
+        like = Like.objects.filter(kind=kind, like=obj.pk, user=user.id)
         if like.exists():
             return like[0].id
         return 0

@@ -25,16 +25,20 @@ class Like(models.Model):
     like = models.CharField(max_length=100, db_index=True)
     date = models.DateTimeField(auto_now_add=True)
 
+    @staticmethod
+    def get_like_model(kind: int) -> Type[Model]:
+        if kind == Like.Kind.USER:
+            return apps.get_model('auth', 'User')
+        if kind == Like.Kind.PARTY:
+            return apps.get_model('party', 'Party')
+        if kind == Like.Kind.CATEGORY:
+            return apps.get_model('party', 'PartyCategory')
+        if kind == Like.Kind.SONG:
+            return apps.get_model('song', 'Song')
+
     @property
     def like_object(self) -> Union[User, Party, PartyCategory, Song]:
-        if self.kind == Like.Kind.USER:
-            return User.objects.get(username=self.like)
-        if self.kind == Like.Kind.PARTY:
-            return Party.objects.get(pk=self.like)
-        if self.kind == Like.Kind.CATEGORY:
-            return PartyCategory.objects.get(pk=self.like)
-        if self.kind == Like.Kind.SONG:
-            return Song.objects.get(pk=self.like)
+        return Like.get_like_model(self.kind).objects.get(pk=self.like)
 
     def __str__(self):
         return '{user} likes a {kind}: {like_object}'.format(
