@@ -28,12 +28,12 @@ class PartyViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset: QuerySet = self.queryset
-        if self.action is 'list':
+        if self.action == 'list':
             if self.request.user.is_authenticated:
                 queryset = queryset.filter(Q(user=self.request.user) | Q(status=Party.Status.PUBLIC))
             else:
                 queryset = queryset.filter(status=Party.Status.PUBLIC)
-        elif self.action is 'retrieve':
+        elif self.action == 'retrieve':
             if self.request.user.is_authenticated:
                 queryset = queryset.filter(Q(user=self.request.user) | ~Q(status=Party.Status.CLOSE))
             else:
@@ -52,7 +52,7 @@ class PartyUserViewSet(CreateModelMixin, DestroyModelMixin, ListModelMixin, Gene
     filter_fields = ('party', 'user',)
 
     def get_serializer_class(self):
-        if self.action is 'create':
+        if self.action == 'create':
             return PartyUserCreateSerializer
         return PartyUserSerializer
 

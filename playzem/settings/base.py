@@ -143,6 +143,7 @@ JWT_AUTH = {
 
 # Reset auth
 
+OLD_PASSWORD_FIELD_ENABLED = True
 REST_AUTH_SERIALIZERS = {
     'PASSWORD_RESET_SERIALIZER': 'playzem.utils.CustomPasswordResetSerializer',
 }
