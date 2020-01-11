@@ -57,7 +57,7 @@ class PartyUserViewSet(CreateModelMixin, DestroyModelMixin, ListModelMixin, Gene
         return PartyUserSerializer
 
 
-class PartyCategoryViewSet(CreateModelMixin, DestroyModelMixin, ListModelMixin, GenericViewSet):
+class PartyCategoryViewSet(ModelViewSet):
     queryset = PartyCategory.objects.all()
     permission_classes = (IsAuthAndPartyOwnerOrOwnerOrReadOnly,)
     serializer_class = PartyCategorySerializer
