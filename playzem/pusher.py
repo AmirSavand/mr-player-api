@@ -14,7 +14,7 @@ class ModelEventNameAffix:
     DELETE = 'delete'
 
 
-def model_trigger(instance, created: bool = None, channel: str = None) -> None:
+def model_trigger(instance, created: bool = None, channel: str = None, data: str = None) -> None:
     """
     Used for model receivers to trigger pusher signals for them
     """
@@ -30,8 +30,11 @@ def model_trigger(instance, created: bool = None, channel: str = None) -> None:
     # Add model as event name with event affix
     event = '{model}-{affix}'.format(model=instance.__class__.__name__, affix=event).lower()
 
+    # If data is not given, set data to instance PK
+    data = data if data else str(instance.pk)
+
     # Trigger a pusher
-    pusher_client.trigger(channel, event, str(instance.pk))
+    pusher_client.trigger(channel, event, data)
 
 
 # Initiate pusher client

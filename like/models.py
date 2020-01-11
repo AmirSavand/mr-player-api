@@ -1,3 +1,4 @@
+import json
 from typing import Union, Type
 
 from django.apps import apps
@@ -59,9 +60,17 @@ def trigger_pusher_like(sender, instance, created=None, **kwargs):
     """
     # No pusher trigger for a user being liked (not party related)
     if instance.kind != Like.Kind.USER:
-        model_trigger(instance, created, get_channel_name(
+        channel = get_channel_name(
             instance.like_object.pk if instance.kind == Like.Kind.PARTY else instance.like_object.party.pk
-        ))
+        )
+        data = {
+            'id': instance.pk,
+            'user': instance.user.username,
+            'kind': instance.kind,
+            'like': instance.like,
+            'data': str(instance.date),
+        }
+        model_trigger(instance, created, channel, json.dumps(data))
 
 
 @receiver(post_delete, sender=User)
