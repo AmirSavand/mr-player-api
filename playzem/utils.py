@@ -101,6 +101,7 @@ class IsAuthAndOwner(BasePermission):
 class CustomPasswordResetSerializer(PasswordResetSerializer):
     def get_email_options(self):
         return {
+            'subject_template_name': 'templates/email-password-reset-subject.txt',
             'email_template_name': 'templates/email-password-reset.txt'
         }
 
