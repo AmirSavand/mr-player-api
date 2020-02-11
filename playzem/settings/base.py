@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django_filters',
     'account',
     'party',
+    'dj',
     'song',
     'like',
 ]

@@ -6,6 +6,7 @@ from rest_framework.documentation import include_docs_urls
 from rest_framework_jwt.views import obtain_jwt_token
 
 from account.views import UserViewSet, AccountViewSet
+from dj.views import DjViewSet, DjUserViewSet
 from like.views import LikeViewSet
 from party.views import PartyViewSet, PartyUserViewSet, PartyCategoryViewSet
 from playzem.settings import ADMIN_URL
@@ -20,6 +21,8 @@ router.register('party-user', PartyUserViewSet, basename='Party User')
 router.register('party-category', PartyCategoryViewSet, basename='Party Category')
 router.register('song', SongViewSet, basename='Song')
 router.register('song-category', SongCategoryViewSet, basename='Song Category')
+router.register('dj', DjViewSet, basename='DJ')
+router.register('dj-user', DjUserViewSet, basename='DJ User')
 router.register('like', LikeViewSet, basename='Like')
 
 urlpatterns = router.urls
