@@ -14,7 +14,7 @@ djangorestframework-jwt==1.11.0
 idna==2.8
 itypes==1.1.0
 Jinja2==2.11.1
-Markdown==3.2
+Markdown==3.2.1
 MarkupSafe==1.1.1
 ndg-httpsclient==0.5.1
 pusher==2.1.4
