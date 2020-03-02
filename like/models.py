@@ -63,13 +63,10 @@ def trigger_pusher_like(sender, instance, created=None, **kwargs):
     Trigger pusher for liking a party, category or song
     """
     # No pusher trigger for a user being liked (not party related)
-    if instance.kind != Like.Kind.USER:
-        party_pk: str
-        if instance.like_object and instance.kind:
-            party_pk = instance.like_object.pk
-        else:
-            party_pk = instance.like_object.party.pk
-        channel = get_channel_name(party_pk)
+    if instance.kind != Like.Kind.USER and instance.like_object:
+        channel = get_channel_name(
+            instance.like_object.pk if instance.kind == Like.Kind.PARTY else instance.like_object.party.pk
+        )
         data = {
             'id': instance.pk,
             'user': instance.user.username,
