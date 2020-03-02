@@ -38,8 +38,11 @@ class Like(models.Model):
             return apps.get_model('song', 'Song')
 
     @property
-    def like_object(self) -> Union[User, Party, PartyCategory, Song]:
-        return Like.get_like_model(self.kind).objects.get(pk=self.like)
+    def like_object(self) -> Union[User, Party, PartyCategory, Song] or None:
+        queryset = Like.get_like_model(self.kind).objects.filter(pk=self.like)
+        if queryset.exist():
+            return queryset[0]
+        return None
 
     def __str__(self):
         return '{user} likes a {kind}: {like_object}'.format(
@@ -60,9 +63,12 @@ def trigger_pusher_like(sender, instance, created=None, **kwargs):
     """
     # No pusher trigger for a user being liked (not party related)
     if instance.kind != Like.Kind.USER:
-        channel = get_channel_name(
-            instance.like_object.pk if instance.kind == Like.Kind.PARTY else instance.like_object.party.pk
-        )
+        party_pk: str
+        if instance.like_object and instance.kind:
+            party_pk = instance.like_object.pk
+        else:
+            party_pk = instance.like_object.party.pk
+        channel = get_channel_name(party_pk)
         data = {
             'id': instance.pk,
             'user': instance.user.username,
