@@ -3,6 +3,7 @@ from typing import Union, Type
 
 from django.apps import apps
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Model
 from django.db.models.signals import post_delete, post_save
@@ -39,10 +40,10 @@ class Like(models.Model):
 
     @property
     def like_object(self) -> Union[User, Party, PartyCategory, Song] or None:
-        queryset = Like.get_like_model(self.kind).objects.filter(pk=self.like)
-        if queryset.exist():
-            return queryset[0]
-        return None
+        try:
+            return Like.get_like_model(self.kind).objects.get(pk=self.like)
+        except ObjectDoesNotExist:
+            return None
 
     def __str__(self):
         return '{user} likes a {kind}: {like_object}'.format(
