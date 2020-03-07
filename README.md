@@ -1,8 +1,8 @@
-# [PlayzEM API](https://playzem.savandbros.com)
+# [PlaysEM API](https://www.playsem.com)
 
 Host and join parties and keep shuffling sick songs.
 
-RESTful API for [playzem](https://github.com/AmirSavand/playzem).
+RESTful API for [playsem](https://github.com/AmirSavand/playsem).
 
 This project is using Python (Django with Django Rest Framework).
 

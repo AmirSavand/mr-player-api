@@ -4,7 +4,7 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
 from party.models import Party, PartyCategory
-from playzem.pusher import model_trigger
+from playsem.pusher import model_trigger
 
 
 class Song(models.Model):

@@ -9,7 +9,7 @@ from account.serializers import UserSerializer, UserMinimalSerializer
 from like.models import Like
 from party.models import Party
 from party.serializers import PartySerializer, PartyCategoryMinimalSerializer
-from playzem.utils import Regex, get_serializer_like
+from playsem.utils import Regex, get_serializer_like
 from song.models import Song, SongCategory
 
 

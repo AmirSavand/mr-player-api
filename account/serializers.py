@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 from account.models import Account
 from like.models import Like
-from playzem.utils import Regex, get_serializer_like
+from playsem.utils import Regex, get_serializer_like
 
 
 class AccountSerializer(serializers.ModelSerializer):

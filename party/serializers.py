@@ -4,7 +4,7 @@ from rest_framework.validators import UniqueTogetherValidator
 from account.serializers import UserSerializer
 from like.models import Like
 from party.models import Party, PartyUser, PartyCategory
-from playzem.utils import Regex, get_serializer_like
+from playsem.utils import Regex, get_serializer_like
 
 
 class PartyCategorySerializer(serializers.ModelSerializer):

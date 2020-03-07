@@ -9,7 +9,7 @@ from account.views import UserViewSet, AccountViewSet
 from dj.views import DjViewSet, DjUserViewSet
 from like.views import LikeViewSet
 from party.views import PartyViewSet, PartyUserViewSet, PartyCategoryViewSet
-from playzem.settings import ADMIN_URL
+from playsem.settings import ADMIN_URL
 from song.views import SongViewSet, SongCategoryViewSet
 
 router = routers.DefaultRouter()
@@ -28,7 +28,7 @@ router.register('like', LikeViewSet, basename='Like')
 urlpatterns = router.urls
 urlpatterns += (
     path(ADMIN_URL, admin.site.urls),
-    path('docs/', include_docs_urls(title='PlayzEM API')),
+    path('docs/', include_docs_urls(title='PlaysEM API')),
     path('auth/', include('rest_framework.urls')),
     path('auth/', obtain_jwt_token),
     path('auth/password/change/', PasswordChangeView.as_view(), name='rest_password_change'),

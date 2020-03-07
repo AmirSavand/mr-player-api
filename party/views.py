@@ -10,7 +10,7 @@ from party.serializers import (
     PartyCreateSerializer,
     PartyCategorySerializer,
 )
-from playzem.utils import IsAuthAndPartyOwnerOrOwnerOrReadOnly, IsAuthAndOwnerOrReadOnly
+from playsem.utils import IsAuthAndPartyOwnerOrOwnerOrReadOnly, IsAuthAndOwnerOrReadOnly
 
 
 class PartyViewSet(ModelViewSet):
