@@ -3,7 +3,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from like.models import Like
 from like.serializers import LikeSerializer, LikeCreateSerializer
-from playzem.utils import IsAuthAndOwnerOrReadOnly
+from playsem.utils import IsAuthAndOwnerOrReadOnly
 
 
 class LikeViewSet(CreateModelMixin, DestroyModelMixin, ListModelMixin, GenericViewSet):

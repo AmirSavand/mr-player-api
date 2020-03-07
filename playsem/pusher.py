@@ -1,7 +1,7 @@
 from pusher import pusher, Pusher
 
 from party.pusher import get_channel_name
-from playzem import settings
+from playsem import settings
 
 
 class ModelEventNameAffix:

@@ -6,7 +6,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from account.models import Account
 from account.serializers import UserSerializer, AccountSerializer
-from playzem.utils import IsAuthAndOwnerOrReadOnly
+from playsem.utils import IsAuthAndOwnerOrReadOnly
 
 
 class UserViewSet(CreateModelMixin, RetrieveModelMixin, GenericViewSet):

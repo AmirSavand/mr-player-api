@@ -1,2 +1,2 @@
 release: python manage.py migrate --noinput
-web: gunicorn playzem.wsgi --log-file -
+web: gunicorn playsem.wsgi --log-file -

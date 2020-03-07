@@ -6,7 +6,7 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
 from party.pusher import get_channel_name
-from playzem.pusher import model_trigger
+from playsem.pusher import model_trigger
 
 
 class Party(models.Model):

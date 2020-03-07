@@ -3,7 +3,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from dj.models import Dj, DjUser
 from dj.serializers import DjSerializer, DjCreateSerializer, DjUserCreateSerializer, DjUserSerializer
-from playzem.utils import IsAuthAndOwnerOrReadOnly
+from playsem.utils import IsAuthAndOwnerOrReadOnly
 
 
 class DjViewSet(ModelViewSet):

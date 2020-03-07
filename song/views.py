@@ -1,7 +1,7 @@
 from rest_framework.mixins import ListModelMixin, DestroyModelMixin, CreateModelMixin
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
-from playzem.utils import LargePagination, IsAuthAndPartyOwnerOrOwnerOrReadOnly
+from playsem.utils import LargePagination, IsAuthAndPartyOwnerOrOwnerOrReadOnly
 from song.models import Song, SongCategory
 from song.serializers import (
     SongSerializer,
