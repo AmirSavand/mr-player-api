@@ -9,6 +9,11 @@ class DjSerializer(serializers.ModelSerializer):
         model = Dj
         fields = '__all__'
 
+    def update(self, instance, validated_data):
+        if not validated_data.get('time'):
+            validated_data['time'] = '00:00:00'
+        return super().update(instance, validated_data)
+
 
 class DjCreateSerializer(DjSerializer):
     user = serializers.HiddenField(default=CurrentUserDefault())
