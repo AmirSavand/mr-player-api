@@ -19,7 +19,7 @@ class DjViewSet(ModelViewSet):
 
 class DjUserViewSet(ModelViewSet):
     queryset = DjUser.objects.all()
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthAndOwnerOrReadOnly,)
     filter_fields = ('dj',)
 
     def get_serializer_class(self):
